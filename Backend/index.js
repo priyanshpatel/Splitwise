@@ -1,3 +1,4 @@
+'use strict'
 // import the require dependencies
 const express = require('express');
 const bcrypt = require('bcrypt');
@@ -32,90 +33,12 @@ app.use((req, res, next) => {
     next();
 });
 
-const mysql = require('mysql');
+const con = require('./modules/database')
+const login = require('./modules/login')
+const signup = require('./modules/signup')
 
-const con = mysql.createConnection({
-    host: 'rds-splitwise.cfxty5nkulfg.us-west-1.rds.amazonaws.com',
-    user: 'admin',
-    password: 'saiyangoku',
-    database: 'RDS_SPLITWISE',
-});
-
-con.connect(function (err) {
-    if (err) throw err;
-    console.log("Connected!");
-});
-
-app.post('/login', (req, res) => {
-    console.log(req.body)
-    var userEmail = req.body.userEmail;
-    var userPassword = req.body.userPassword;
-
-    console.log(userEmail);
-    console.log(userPassword);
-
-    console.log('Inside Login Post Request');
-
-    const loginQuery = "SELECT * FROM USERS WHERE USER_EMAIL = '" + userEmail + "'";
-    console.log("Query: " + loginQuery);
-
-    con.query(loginQuery, function (err, result, fields) {
-        if (err) throw err;
-        console.log(result);
-
-        console.log(result[0].USER_PASSWORD);
-        userDBPassword = result[0].USER_PASSWORD
-
-        let passCheck = bcrypt.compareSync(userPassword, userDBPassword)
-        // let passCheck = true;
-        if (passCheck) {
-            res.cookie('cookie', userEmail, { maxAge: 900000, httpOnly: false, path: '/' });
-            req.session.user = result[0];
-            console.log("login success");
-            res.status(200).send("Login Success");
-
-        } else {
-            res.status(400).send("Login Failed");
-            console.log("login failed");
-        }
-    });
-});
-app.post('/signup', (req, res) => {
-    console.log(req.body);
-    // name emailid and password, email id should be unique
-    var userName = req.body.userName;
-    var userEmail = req.body.userEmail;
-    var userPassword = req.body.userPassword;
-
-    console.log("Inside signup post");
-
-    const signupCheckQuery = "SELECT COUNT(0) AS COUNT FROM USERS WHERE USER_EMAIL = '" + userEmail + "'";
-    console.log("Query: " + signupCheckQuery);
-
-    con.query(signupCheckQuery, function (err, result, fields) {
-        if (err) throw err;
-        console.log(result[0].COUNT);
-        if (result[0].COUNT > 0) {
-            res.status(400).send("Email already exists.");
-        } else {
-            //const encryptedPassword = async(userPassword) => await bcrypt.hash(userPassword, await bcrypt.genSalt());
-            const hashedPassword = bcrypt.hashSync(userPassword, 10);
-            console.log("Encrypted password: "+hashedPassword);
-            signupQuery = "INSERT INTO USERS(USER_EMAIL, USER_NAME, USER_PASSWORD) VALUES ('" + userEmail + "','" + userName + "','" + hashedPassword + "')";
-            console.log(signupQuery);
-            con.query(signupQuery, function (err, result, fields) {
-                if (err) {
-                    res.status(500).send('Error');
-                    throw err;
-                } else {
-                    res.status(200).send("Signup successful");
-                }
-            });
-        };
-    });
-
-});
-
+app.use('/login', login)
+app.use('/signup', signup)
 
 app.listen(3000);
 console.log("Server Listening on port 3000");
