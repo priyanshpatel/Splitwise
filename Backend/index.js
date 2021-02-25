@@ -37,10 +37,12 @@ const con = require('./modules/database')
 const login = require('./modules/login')
 const signup = require('./modules/signup')
 const profile = require('./modules/profile')
+const groups = require('./modules/groups')
 
 app.use('/login', login)
 app.use('/signup', signup)
 app.use('/profile',profile)
+app.use('/groups', groups)
 
 app.listen(3000);
 console.log("Server Listening on port 3000");
