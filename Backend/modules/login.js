@@ -38,7 +38,8 @@ router.post('/', (req, res) => {
                             res.cookie('cookie', userEmail, { maxAge: 900000, httpOnly: false, path: '/' });
                             req.session.user = result[0];
                             console.log("login success");
-                            res.status(200).send("Login Success");
+                            // res.status(200).send("Login Success");
+                            res.status(200).json({userID: result[0].USER_ID});
 
                         } else {
                             res.status(400).send("Login Failed");

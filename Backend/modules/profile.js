@@ -1,0 +1,56 @@
+'use strict';
+const express = require('express');
+const router = express.Router();
+// const bcrypt = require('bcrypt');
+const con = require('./database');
+
+router.get('/', (req, res) => {
+    const userID = req.body.userID;
+    const profileViewQuery = "SELECT * FROM USERS WHERE USER_ID = " + userID;
+    // console.log(profileViewQuery);
+    con.query(profileViewQuery, function (err, result, fields) {
+        if (err) {
+            res.status(500).send('Error');
+        } else {
+            console.log(result[0]);
+            res.status(200).json({
+                userID: result[0].USER_ID,
+                'userEmail': result[0].USER_EMAIL,
+                'userName': result[0].USER_NAME,
+                'phoneNumber': result[0].PHONE_NUMBER,
+                'timezone': result[0].TIMEZONE,
+                'currency': result[0].CURRENCY,
+                'language': result[0].LANGUAGE,
+                'profilePicture': result[0].PROFILE_PICTURE
+            });
+        }
+    });
+});
+
+router.post('/update', (req, res) => {
+    const userID = req.body.userID;
+    const userName = req.body.userName;
+    const userEmail = req.body.userName;
+    const phoneNumber = req.body.phoneNumber;
+    const currency = req.body.currency;
+    const timezone = req.body.timezone;
+    const language = req.body.language;
+    const profilePicture = req.body.profilePicture;
+
+    // console.log("Inside update profile post");
+
+    const updateProfileQuery = 'UPDATE USERS SET USER_NAME = "' + userName + '", USER_EMAIL = "' + userEmail + '", PHONE_NUMBER = ' + phoneNumber + ', CURRENCY = "' + currency + '", TIMEZONE = "' + timezone + '", LANGUAGE = "' + language + '", PROFILE_PICTURE = "' + profilePicture + '" WHERE USER_ID = ' + userID;
+    // console.log(updateProfileQuery);
+
+    con.query(updateProfileQuery, function (err, result, fields) {
+        if (err) {
+            res.status(500).send('Error');
+            throw err;
+        } else {
+            res.status(200).send("Profile Updated Successfully");
+        }
+    });
+
+});
+
+module.exports = router;

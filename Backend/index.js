@@ -36,9 +36,11 @@ app.use((req, res, next) => {
 const con = require('./modules/database')
 const login = require('./modules/login')
 const signup = require('./modules/signup')
+const profile = require('./modules/profile')
 
 app.use('/login', login)
 app.use('/signup', signup)
+app.use('/profile',profile)
 
 app.listen(3000);
 console.log("Server Listening on port 3000");
