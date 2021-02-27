@@ -36,3 +36,29 @@
     transform: rotate(360deg);
   }
 }
+
+.home-background {
+  background-image: url("./images/home_background.png");
+}
+
+.div-pad {
+  padding-top: 100px;
+  padding-left: 100px;
+  padding-bottom: 250px;
+}
+
+.icon-style{
+  font-size: 64px;
+  padding-right: 0.5cm;
+  padding-top: 0.5cm;
+  padding-bottom: 0.5cm;
+}
+
+.splitwise-color{
+  color: #59cfa7;
+}
+
+.landing-plane {
+  height: 600px;
+  width: 600px;
+};
