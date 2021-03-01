@@ -15,7 +15,8 @@ class Signup extends Component {
             name: "",
             email: "",
             password: "",
-            Msg: ""
+            Msg: "",
+            MsgFlag: false
         }
         this.emailChangeHandler = this.emailChangeHandler.bind(this);
         this.passwordChangeHandler = this.passwordChangeHandler.bind(this);
@@ -56,29 +57,29 @@ class Signup extends Component {
                         userID: response.data.userID
                     })
                 }
-                else if (response.status === 400){
+                else if (response.status === 201) {
                     console.log("Email already exists");
                     this.setState({
-                        Msg: "Email already exists"
+                        Msg: "Email already exists",
+                        MsgFlag: true
                     })
+                    console.log("=============");
+                    console.log(this.state.MsgFlag);
+                    console.log(this.state.Msg);
                 }
                 else {
                     console.log("Sign up failed");
                     this.setState({
-                        Msg: "Sign up failed"
+                        Msg: "Sign up failed",
+                        MsgFlag: true
                     })
                 }
             })
     }
     render() {
-        let redirectVar = null;
-        // if (cookie.load('cookie')) {
-        //     redirectVar = <Redirect to="/dashboard" />
-        // }
         return (
             <BrowserRouter>
                 <div>
-                    {redirectVar}
                     <div>
                         <Navbar />
                     </div>
@@ -90,16 +91,18 @@ class Signup extends Component {
                             </div>
                             <div class="col-3">
                                 <span style={{ color: "#8a8f94" }}><strong>INTRODUCE YOURSELF</strong></span><br /><br />
-                                <label><strong>Hi there! My name is</strong></label>
-                                <input class="form-input" onChange={this.nameChangeHandler} type="text" class="form-control" name="name" required></input>
-                                <br/>
-                                <label><strong>Email address</strong></label>
-                                <input class="form-input" onChange={this.emailChangeHandler} type="text" class="form-control" name="email" required></input>
-                                <br />
-                                <label><strong>Password</strong></label>
-                                <input class="form-input" onChange={this.passwordChangeHandler} type="password" class="form-control" name="password" required></input>
-                                <br />
-                                <a class="btn btn-primary btn-lg" type="button" onClick={this.submitSignup} style={{ backgroundColor: "#ed752f", border: "none" }}>Sign me up!</a>
+                                <form onSubmit={this.submitSignup}>
+                                    <label><strong>Hi there! My name is</strong></label>
+                                    <input class="form-input" onChange={this.nameChangeHandler} type="text" class="form-control" name="name" required></input>
+                                    <br />
+                                    <label><strong>Email address</strong></label>
+                                    <input class="form-input" onChange={this.emailChangeHandler} type="email" class="form-control" name="email" required></input>
+                                    <br />
+                                    <label><strong>Password</strong></label>
+                                    <input class="form-input" onChange={this.passwordChangeHandler} type="password" class="form-control" name="password" required></input>
+                                    <br />
+                                    <button class="btn btn-primary btn-lg" type="submit" style={{ backgroundColor: "#ed752f", border: "none" }}>Sign me up!</button>
+                                </form>
                                 {this.state.MsgFlag ? <p>{this.state.Msg}</p> : null}
                             </div>
                         </div>

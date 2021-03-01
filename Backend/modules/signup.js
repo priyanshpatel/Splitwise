@@ -21,7 +21,8 @@ router.post('/', (req, res) => {
         if (err) throw err;
         console.log(result[0].COUNT);
         if (result[0].COUNT > 0) {
-            res.status(400).send("Email already exists.");
+            res.status(201).send("Email already exists.");
+            console.log("Email already exists");
         } else {
             //const encryptedPassword = async(userPassword) => await bcrypt.hash(userPassword, await bcrypt.genSalt());
             const hashedPassword = bcrypt.hashSync(userPassword, 10);

@@ -43,14 +43,14 @@ router.post('/', (req, res) => {
                             res.status(200).json({userID: result[0].USER_ID});
 
                         } else {
-                            res.status(400).send("Login Failed");
+                            res.status(201).send("Login Failed");
                             console.log("login failed");
                         }
                     }
                 });
 
             } else {
-                res.status(400).send("Invalid Credentials");
+                res.status(201).send("Invalid Credentials");
                 console.log("Invalid Credentials");
             }
         }

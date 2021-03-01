@@ -23,8 +23,7 @@ class Login extends Component {
     }
     componentWillMount() {
         this.setState({
-            authFlag: false,
-            MsgFlag: false
+            authFlag: false
         })
     }
     emailChangeHandler = (e) => {
@@ -58,7 +57,7 @@ class Login extends Component {
                         Msg: "login success",
                         userID: response.data.userID
                     })
-                } else if (response.status === 400) {
+                } else if (response.status === 201) {
                     //Invalid credentials
                     console.log(response.data);
                     this.setState({
@@ -75,6 +74,8 @@ class Login extends Component {
                         Msg: "Login Failed"
                     })
                 }
+            }).catch(e => {
+                console.log("Inside catch");
             })
     }
     render() {
@@ -90,15 +91,18 @@ class Login extends Component {
                             <img src={splitwise_logo} width="250" height="250" alt="" />
                         </div>
                         <div class="col-3">
-                            <span style={{ color: "#8a8f94"}}><strong>WELCOME TO SPLITWISE</strong></span><br/><br/>
-                            <label><strong>Email address</strong></label>
-                            <input class="form-input" onChange={this.emailChangeHandler} type="text" class="form-control" name="email" required></input>
-                            <br/>
-                            <label><strong>Password</strong></label>
-                            <input class="form-input" onChange={this.passwordChangeHandler} type="password" class="form-control" name="password" required></input>
-                            <br/>
-                            <a class="btn btn-primary" type="button" onClick={this.submitLogin} style={{ backgroundColor: "#ed752f", border: "none" }}>Log In</a>
-                            {this.state.MsgFlag ? <p>{this.state.Msg}</p> : null}
+                            <span style={{ color: "#8a8f94" }}><strong>WELCOME TO SPLITWISE</strong></span><br /><br />
+                            <form onSubmit={this.submitLogin}>
+                                <label for="inputEmail"><strong>Email address</strong></label>
+                                <input class="form-input" onChange={this.emailChangeHandler} type="email" id="inputEmail" class="form-control" name="email" required></input>
+                                <br />
+                                <label for="inputPassword"><strong>Password</strong></label>
+                                <input class="form-input" id="inputPassword" onChange={this.passwordChangeHandler} type="password" class="form-control" name="password" required></input>
+                                <br />
+                                <button class="btn btn-primary" type="submit" style={{ backgroundColor: "#ed752f", border: "none" }}>Log In</button>
+                            </form>
+                            <br></br>
+                            {this.state.MsgFlag ? <div class="alert alert-danger" role="alert">{this.state.Msg}</div> : null}
                         </div>
                     </div>
                 </div>
