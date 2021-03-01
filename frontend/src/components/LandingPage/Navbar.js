@@ -22,7 +22,7 @@ class Navbar extends Component {
             console.log("Cookie can be read");
             navLogin = (
                 <ul class="nav nabvar-nav navbar-right">
-                    <a class="btn btn-primary" type="button" href="/" style={{ backgroundColor: "#59cfa7", border: "none" }}>Logout</a>
+                    <a class="btn btn-primary" type="button" href="/" onClick = {this.handleLogout} style={{ backgroundColor: "#59cfa7", border: "none" }}>Logout</a>
                 </ul>
             );
         } else {
