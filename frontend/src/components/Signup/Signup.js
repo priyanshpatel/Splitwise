@@ -11,6 +11,7 @@ class Signup extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            userID: "",
             name: "",
             email: "",
             password: "",
@@ -51,7 +52,8 @@ class Signup extends Component {
                 if (response.status === 200) {
                     console.log("Sign up success");
                     this.setState({
-                        Msg: "Sign up success"
+                        Msg: "Sign up success",
+                        userID: response.data.userID
                     })
                 }
                 else if (response.status === 400){

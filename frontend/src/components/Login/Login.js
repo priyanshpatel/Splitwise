@@ -10,6 +10,7 @@ class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            userID: null,
             email: "",
             password: "",
             authFlag: false,
@@ -54,7 +55,8 @@ class Login extends Component {
                     this.setState({
                         authFlag: false,
                         MsgFlag: false,
-                        Msg: "login success"
+                        Msg: "login success",
+                        userID: response.data.userID
                     })
                 } else if (response.status === 400) {
                     //Invalid credentials

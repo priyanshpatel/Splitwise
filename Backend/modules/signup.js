@@ -10,6 +10,7 @@ router.post('/', (req, res) => {
     const userName = req.body.userName;
     const userEmail = req.body.userEmail;
     const userPassword = req.body.userPassword;
+    let signupFlag = false;
 
     console.log("Inside signup post");
 
@@ -30,9 +31,21 @@ router.post('/', (req, res) => {
             con.query(signupQuery, function (err, result, fields) {
                 if (err) {
                     res.status(500).send('Error');
-                    throw err;
                 } else {
-                    res.status(200).send("Signup successful");
+                    signupFlag = true
+                    // res.status(200).send("Signup successful");
+                    if (signupFlag){
+                        const getUserIDQuery = "SELECT USER_ID FROM USERS WHERE USER_EMAIL = 'test12@gmail.com'"
+                        console.log(getUserIDQuery);
+                        con.query(getUserIDQuery, function (err, result, fields) {
+                            if(err){
+                                res.status(500).send('Error');
+                            } else {
+                                res.status(200).json({userID: result[0].USER_ID});
+                            }
+                            
+                        })
+                    }
                 }
             });
         };
