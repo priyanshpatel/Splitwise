@@ -44,7 +44,7 @@
 .div-pad {
   padding-top: 100px;
   padding-left: 100px;
-  padding-bottom: 250px;
+  padding-bottom: 200px;
 }
 
 .icon-style{
@@ -62,3 +62,9 @@
   height: 600px;
   width: 600px;
 };
+
+.login-img-pad {
+  padding-top: 50px;
+  padding-left: 100px;
+  padding-bottom: 200px;
+}

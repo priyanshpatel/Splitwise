@@ -30,12 +30,13 @@ router.post('/', (req, res) => {
                         console.log(result);
 
                         console.log(result[0].USER_PASSWORD);
-                        const userDBPassword = result[0].USER_PASSWORD
+                        const userDBPassword = result[0].USER_PASSWORD;
+                        const userID = result[0].USER_ID;
 
                         let passCheck = bcrypt.compareSync(userPassword, userDBPassword)
                         // let passCheck = true;
                         if (passCheck) {
-                            res.cookie('cookie', userEmail, { maxAge: 900000, httpOnly: false, path: '/' });
+                            res.cookie('cookie', userID, { maxAge: 900000, httpOnly: false, path: '/' });
                             req.session.user = result[0];
                             console.log("login success");
                             // res.status(200).send("Login Success");
@@ -50,6 +51,7 @@ router.post('/', (req, res) => {
 
             } else {
                 res.status(400).send("Invalid Credentials");
+                console.log("Invalid Credentials");
             }
         }
     });
