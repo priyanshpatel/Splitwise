@@ -96,4 +96,44 @@ router.get('/mygroups', (req,res) => {
 
 });
 
+router.post('/acceptrejectinvite', (req,res)=>{
+    const groupID = req.body.groupID;
+    const userID = req.body.userID;
+    const flag = req.body.flag;
+
+    const acceptRejectQuery = "UPDATE USER_GROUP_MAP U SET U.INVITE_FLAG = '"+flag+"' WHERE U.GROUP_ID = "+groupID+" AND U.USER_ID = "+userID
+    console.log(acceptRejectQuery);
+
+    con.query(acceptRejectQuery, function(err, result, fields){
+        if(err){
+            console.log("Error updating invite flag");
+            res.status(500).send("Error updating Invite");
+            return;
+        } else{
+            console.log(result);
+            res.status(200).send(result);
+        }
+    });
+
+})
+
+router.post('/leave', (req,res)=>{
+    const groupID = req.body.groupID;
+    const userID = req.body.userID;
+    
+    const leaveGroupQuery = "DELETE FROM USER_GROUP_MAP WHERE GROUP_ID = "+groupID+" AND USER_ID = "+userID
+    console.log(leaveGroupQuery);
+    
+    con.query(leaveGroupQuery, function(err, result, fields){
+        if(err){
+            console.log("Error while leaving group");
+            res.status(500).send("Error while leaving group");
+            return;
+        } else{
+            console.log(result);
+            res.status(200).send(result);
+        }
+    });
+})
+
 module.exports = router;
