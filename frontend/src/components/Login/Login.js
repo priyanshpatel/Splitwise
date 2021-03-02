@@ -92,7 +92,7 @@ class Login extends Component {
                         </div>
                         <div class="col-3">
                             <span style={{ color: "#8a8f94" }}><strong>WELCOME TO SPLITWISE</strong></span><br /><br />
-                            <form onSubmit={this.submitLogin}>
+                            <form onSubmit={this.submitLogin} method="post">
                                 <label for="inputEmail"><strong>Email address</strong></label>
                                 <input class="form-input" onChange={this.emailChangeHandler} type="email" id="inputEmail" class="form-control" name="email" required></input>
                                 <br />

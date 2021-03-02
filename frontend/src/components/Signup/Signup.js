@@ -60,9 +60,9 @@ class Signup extends Component {
                     })
                 }
                 else if (response.status === 201) {
-                    console.log("Email already exists");
+                    console.log("Email ID already registered");
                     this.setState({
-                        Msg: "Email already exists",
+                        Msg: "Email ID already registered",
                         MsgFlag: true
                     })
                     console.log("=============");
@@ -93,7 +93,7 @@ class Signup extends Component {
                             </div>
                             <div class="col-3">
                                 <span style={{ color: "#8a8f94" }}><strong>INTRODUCE YOURSELF</strong></span><br /><br />
-                                <form onSubmit={this.submitSignup}>
+                                <form onSubmit={this.submitSignup} method="post">
                                     <label><strong>Hi there! My name is</strong></label>
                                     <input class="form-input" onChange={this.nameChangeHandler} type="text" class="form-control" name="name" required></input>
                                     <br />
