@@ -39,6 +39,7 @@ class Signup extends Component {
         })
     }
     submitSignup = (e) => {
+        e.preventDefault();
         const data = {
             userName: this.state.name,
             userEmail: this.state.email,
@@ -53,6 +54,7 @@ class Signup extends Component {
                 if (response.status === 200) {
                     console.log("Sign up success");
                     this.setState({
+                        MsgFlag: false,
                         Msg: "Sign up success",
                         userID: response.data.userID
                     })
@@ -103,7 +105,8 @@ class Signup extends Component {
                                     <br />
                                     <button class="btn btn-primary btn-lg" type="submit" style={{ backgroundColor: "#ed752f", border: "none" }}>Sign me up!</button>
                                 </form>
-                                {this.state.MsgFlag ? <p>{this.state.Msg}</p> : null}
+                                <br/>
+                                {this.state.MsgFlag ? <div class="alert alert-danger" role="alert">{this.state.Msg}</div> : null}
                             </div>
                         </div>
                     </div>

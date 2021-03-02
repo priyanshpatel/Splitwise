@@ -26,7 +26,7 @@ router.post('/', (req, res) => {
         } else {
             //const encryptedPassword = async(userPassword) => await bcrypt.hash(userPassword, await bcrypt.genSalt());
             const hashedPassword = bcrypt.hashSync(userPassword, 10);
-            console.log("Encrypted password: "+hashedPassword);
+            console.log("Encrypted password: " + hashedPassword);
             const signupQuery = "INSERT INTO USERS(USER_EMAIL, USER_NAME, USER_PASSWORD) VALUES ('" + userEmail + "','" + userName + "','" + hashedPassword + "')";
             console.log(signupQuery);
             con.query(signupQuery, function (err, result, fields) {
@@ -35,16 +35,18 @@ router.post('/', (req, res) => {
                 } else {
                     signupFlag = true
                     // res.status(200).send("Signup successful");
-                    if (signupFlag){
-                        const getUserIDQuery = "SELECT USER_ID FROM USERS WHERE USER_EMAIL = 'test12@gmail.com'"
+                    if (signupFlag) {
+                        const getUserIDQuery = "SELECT USER_ID FROM USERS WHERE USER_EMAIL = '" + userEmail + "'"
                         console.log(getUserIDQuery);
                         con.query(getUserIDQuery, function (err, result, fields) {
-                            if(err){
+                            if (err) {
                                 res.status(500).send('Error');
                             } else {
-                                res.status(200).json({userID: result[0].USER_ID});
+                                res.cookie('cookie', result[0].USER_ID, { maxAge: 900000, httpOnly: false, path: '/' });
+                                req.session.user = result[0];
+                                res.status(200).json({ userID: result[0].USER_ID });
                             }
-                            
+
                         })
                     }
                 }
