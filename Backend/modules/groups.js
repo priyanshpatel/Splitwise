@@ -164,7 +164,11 @@ router.post('/update', (req, res) => {
         if (err) {
             console.log("Error while updating group details");
             console.log(err);
-            res.status(500).send(err);
+            if (err.code === 'ER_DUP_ENTRY') {
+                res.status(201).send('Group name already exists');
+            } else {
+                res.status(500).send(err);
+            }
         } else {
             console.log(result);
             res.status(200).send(result);
