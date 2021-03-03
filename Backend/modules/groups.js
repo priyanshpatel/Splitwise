@@ -158,14 +158,14 @@ router.post('/update', (req, res) => {
     const groupID = req.body.groupID;
     const groupName = req.body.groupName;
     const groupPicture = req.body.groupPicture;
-    const updateGroupDetails = "UPDATE EXPENSE_GROUPS SET GROUP_NAME = '"+groupName+"', GROUP_PICTURE = '"+groupPicture+"' WHERE GROUP_ID = "+groupID
+    const updateGroupDetails = "UPDATE EXPENSE_GROUPS SET GROUP_NAME = '" + groupName + "', GROUP_PICTURE = '" + groupPicture + "' WHERE GROUP_ID = " + groupID
 
-    con.query(updateGroupDetails, function (err, result, fields){
-        if(err){
+    con.query(updateGroupDetails, function (err, result, fields) {
+        if (err) {
             console.log("Error while updating group details");
             console.log(err);
             res.status(500).send(err);
-        } else{
+        } else {
             console.log(result);
             res.status(200).send(result);
         }
