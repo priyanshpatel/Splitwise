@@ -5,6 +5,9 @@ import { Redirect } from 'react-router';
 import '../../App.css';
 import splitwise_home from '../../images/splitwise_home.png';
 import splitwise_logo from '../../images/splitwise_logo.png';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { userLogout } from '../../actions/loginAction'
 
 class Navbar extends Component {
     constructor(props) {
@@ -14,6 +17,7 @@ class Navbar extends Component {
 
     handleLogout = () => {
         cookie.remove('cookie', { path: '/' })
+        this.props.userLogout();
     }
 
     render() {
@@ -52,4 +56,17 @@ class Navbar extends Component {
     }
 }
 
-export default Navbar;
+//export default Navbar;
+
+Navbar.propTypes = {
+    userLogin: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired
+}
+
+const mapStateToProps = state => {
+    return ({
+        user: state.login.user
+    })
+}
+
+export default connect(mapStateToProps, { userLogout })(Navbar);

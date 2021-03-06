@@ -5,25 +5,22 @@ import { Redirect } from 'react-router';
 import Navbar from '../LandingPage/Navbar';
 import splitwise_logo from '../../images/splitwise_logo.png';
 import axios from 'axios';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { userLogin } from '../../actions/loginAction'
 
 class Login extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            userID: null,
-            email: "",
-            password: "",
-            authFlag: false,
-            MsgFlag: false,
-            Msg: ""
-        }
+        this.state = {}
         this.emailChangeHandler = this.emailChangeHandler.bind(this);
         this.passwordChangeHandler = this.passwordChangeHandler.bind(this);
         this.submitLogin = this.submitLogin.bind(this);
     }
     componentWillMount() {
         this.setState({
-            authFlag: false
+            authFlag: false,
+            MsgFlag: false //
         })
     }
     emailChangeHandler = (e) => {
@@ -42,41 +39,8 @@ class Login extends Component {
             userEmail: this.state.email,
             userPassword: this.state.password
         }
-        axios.defaults.withCredentials = true;
-        axios.post('http://localhost:3001/login', data)
-            .then(response => {
-                console.log("=========Inside frontend===========");
-                console.log("Status Code: ", response.status);
-                console.log(response.data);
-                if (response.status === 200) {
-                    //redirect to dashboard
-                    console.log(response.data);
-                    this.setState({
-                        authFlag: false,
-                        MsgFlag: false,
-                        Msg: "login success",
-                        userID: response.data.userID
-                    })
-                } else if (response.status === 201) {
-                    //Invalid credentials
-                    console.log(response.data);
-                    this.setState({
-                        authFlag: true,
-                        MsgFlag: true,
-                        Msg: "Invalid Credentials"
-                    })
-                } else {
-                    //login failed
-                    console.log(response.data);
-                    this.setState({
-                        authFlag: true,
-                        MsgFlag: true,
-                        Msg: "Login Failed"
-                    })
-                }
-            }).catch(e => {
-                console.log("Inside catch");
-            })
+        console.log(data);
+        this.props.userLogin(data);
     }
     render() {
         return (
@@ -92,7 +56,7 @@ class Login extends Component {
                         </div>
                         <div class="col-3">
                             <span style={{ color: "#8a8f94" }}><strong>WELCOME TO SPLITWISE</strong></span><br /><br />
-                            <form onSubmit={this.submitLogin} method="post">
+                            <form onSubmit={this.submitLogin} method="post" action="/signup">
                                 <label for="inputEmail"><strong>Email address</strong></label>
                                 <input class="form-input" onChange={this.emailChangeHandler} type="email" id="inputEmail" class="form-control" name="email" required></input>
                                 <br />
@@ -110,4 +74,16 @@ class Login extends Component {
         )
     }
 }
-export default Login;
+
+Login.propTypes = {
+    userLogin: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired
+}
+
+const mapStateToProps = state => {
+    return ({
+        user: state.login.user
+    })
+}
+
+export default connect(mapStateToProps, { userLogin })(Login);

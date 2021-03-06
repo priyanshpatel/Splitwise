@@ -6,18 +6,22 @@ import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import Navbar from '../LandingPage/Navbar';
 import { BrowserRouter, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { userSignup } from '../../actions/signupAction'
 
 class Signup extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            userID: "",
-            name: "",
-            email: "",
-            password: "",
-            Msg: "",
-            MsgFlag: false
-        }
+        // this.state = {
+        //     userID: "",
+        //     name: "",
+        //     email: "",
+        //     password: "",
+        //     Msg: "",
+        //     MsgFlag: false
+        // }
+        this.state = {};
         this.emailChangeHandler = this.emailChangeHandler.bind(this);
         this.passwordChangeHandler = this.passwordChangeHandler.bind(this);
         this.nameChangeHandler = this.nameChangeHandler.bind(this);
@@ -45,38 +49,40 @@ class Signup extends Component {
             userEmail: this.state.email,
             userPassword: this.state.password
         }
-        axios.defaults.withCredentials = true;
-        axios.post('http://localhost:3001/signup', data)
-            .then(response => {
-                console.log("=========Inside frontend===========");
-                console.log("Status Code: ", response.status);
-                console.log(response.data);
-                if (response.status === 200) {
-                    console.log("Sign up success");
-                    this.setState({
-                        MsgFlag: false,
-                        Msg: "Sign up success",
-                        userID: response.data.userID
-                    })
-                }
-                else if (response.status === 201) {
-                    console.log("Email ID already registered");
-                    this.setState({
-                        Msg: "Email ID already registered",
-                        MsgFlag: true
-                    })
-                    console.log("=============");
-                    console.log(this.state.MsgFlag);
-                    console.log(this.state.Msg);
-                }
-                else {
-                    console.log("Sign up failed");
-                    this.setState({
-                        Msg: "Sign up failed",
-                        MsgFlag: true
-                    })
-                }
-            })
+        this.props.userSignup(data);
+
+        // axios.defaults.withCredentials = true;
+        // axios.post('http://localhost:3001/signup', data)
+        //     .then(response => {
+        //         console.log("=========Inside frontend===========");
+        //         console.log("Status Code: ", response.status);
+        //         console.log(response.data);
+        //         if (response.status === 200) {
+        //             console.log("Sign up success");
+        //             this.setState({
+        //                 MsgFlag: false,
+        //                 Msg: "Sign up success",
+        //                 userID: response.data.userID
+        //             })
+        //         }
+        //         else if (response.status === 201) {
+        //             console.log("Email ID already registered");
+        //             this.setState({
+        //                 Msg: "Email ID already registered",
+        //                 MsgFlag: true
+        //             })
+        //             console.log("=============");
+        //             console.log(this.state.MsgFlag);
+        //             console.log(this.state.Msg);
+        //         }
+        //         else {
+        //             console.log("Sign up failed");
+        //             this.setState({
+        //                 Msg: "Sign up failed",
+        //                 MsgFlag: true
+        //             })
+        //         }
+        //     })
     }
     render() {
         return (
@@ -115,4 +121,17 @@ class Signup extends Component {
         )
     }
 }
-export default Signup;
+// export default Signup;
+
+Signup.propTypes = {
+    userSignup: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired
+}
+
+const mapStateToProps = state => {
+    return ({
+        user: state.signup.user
+    })
+}
+
+export default connect(mapStateToProps, { userSignup })(Signup);

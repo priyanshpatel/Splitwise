@@ -24,7 +24,7 @@ router.post('/add',(req, res) => {
     con.query(countGroupMembersQuery, async function(err, result, fields){
         if(err){
             console.log("Error");
-            res.status(500).send("Error while counting group members")
+            res.status(500).send("Error while counting group members");
             return;
         }
         else{

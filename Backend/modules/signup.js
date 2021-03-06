@@ -18,11 +18,17 @@ router.post('/', (req, res) => {
     console.log("Query: " + signupCheckQuery);
 
     con.query(signupCheckQuery, function (err, result, fields) {
-        if (err) throw err;
+        if (err){
+            console.log("Error while checking for user email");
+            res.status(500).send(err);
+            return;
+        }
         console.log(result[0].COUNT);
         if (result[0].COUNT > 0) {
-            res.status(201).send("Email already exists.");
+            //res.status(201).send("Email already exists.");
+            res.status(500).send("Email already exists.");
             console.log("Email already exists");
+            return;
         } else {
             //const encryptedPassword = async(userPassword) => await bcrypt.hash(userPassword, await bcrypt.genSalt());
             const hashedPassword = bcrypt.hashSync(userPassword, 10);
@@ -32,6 +38,8 @@ router.post('/', (req, res) => {
             con.query(signupQuery, function (err, result, fields) {
                 if (err) {
                     res.status(500).send('Error');
+                    console.log(err);
+                    return;
                 } else {
                     signupFlag = true
                     // res.status(200).send("Signup successful");
@@ -41,10 +49,12 @@ router.post('/', (req, res) => {
                         con.query(getUserIDQuery, function (err, result, fields) {
                             if (err) {
                                 res.status(500).send('Error');
+                                return;
                             } else {
                                 res.cookie('cookie', result[0].USER_ID, { maxAge: 900000, httpOnly: false, path: '/' });
                                 req.session.user = result[0];
                                 res.status(200).json({ userID: result[0].USER_ID });
+                                console.log("cookie set");
                             }
 
                         })
