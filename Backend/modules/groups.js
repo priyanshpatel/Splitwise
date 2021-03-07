@@ -11,6 +11,7 @@ router.post('/create', (req, res) => {
     const groupMembers = req.body.groupMembers
     const ts = new Date().toISOString().slice(0, 19).replace('T', ' ');
     const groupCount = 0;
+    let groupID = null;
 
     const groupCountQuery = "SELECT COUNT(0) AS COUNT FROM EXPENSE_GROUPS WHERE GROUP_NAME = '" + groupName + "'";
     console.log(groupCountQuery);
@@ -21,7 +22,7 @@ router.post('/create', (req, res) => {
             return;
         } else if (result[0].COUNT > 0) {
             console.log("Group name already exists.");
-            res.status(200).send("Group name already exists");
+            res.status(201).send("Group name already exists");
             return;
         } else {
             const createGroupQuery = "INSERT INTO EXPENSE_GROUPS(GROUP_NAME, CREATED_BY, CREATE_DATE, GROUP_PICTURE) VALUES ('" + groupName + "'," + userID + ",'" + ts + "','" + groupPicture + "')";
@@ -29,10 +30,22 @@ router.post('/create', (req, res) => {
             con.query(createGroupQuery, function (err, result, fields) {
                 if (err) {
                     console.log("error1");
-                    res.status(500).send('Error');
+                    res.status(500).send('Error while creating group');
                     return;
                 }
                 else {
+                    const lastGroupIDQuery = "SELECT MAX(GROUP_ID) AS GROUP_ID FROM EXPENSE_GROUPS";
+                    con.query(lastGroupIDQuery, function (err, result, fields) {
+                        if(err) {
+                            console.log(err);
+                            res.status(500).status(err);
+                            return;
+                        }
+                        else {
+                            groupID = result[0];
+                        }
+                    });
+
                     const mainUserAddQuery = "INSERT INTO USER_GROUP_MAP(USER_ID, GROUP_ID, ADDED_BY, ADDED_DATE, INVITE_FLAG, JOIN_DATE) SELECT EXPENSE_GROUPS.CREATED_BY, EXPENSE_GROUPS.GROUP_ID, EXPENSE_GROUPS.CREATED_BY, EXPENSE_GROUPS.CREATE_DATE, 'A', EXPENSE_GROUPS.CREATE_DATE FROM EXPENSE_GROUPS WHERE EXPENSE_GROUPS.GROUP_NAME = '" + groupName + "'";
                     con.query(mainUserAddQuery, function (err, result, fields) {
                         if (err) {
@@ -51,7 +64,7 @@ router.post('/create', (req, res) => {
                                 }
                             });
                         }
-                        res.status(200).send("Group Created SuccessFully");
+                        res.status(200).send(groupID);
 
                     });
                 }
