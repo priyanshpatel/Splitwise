@@ -36,7 +36,7 @@ router.post('/create', (req, res) => {
                 else {
                     const lastGroupIDQuery = "SELECT MAX(GROUP_ID) AS GROUP_ID FROM EXPENSE_GROUPS";
                     con.query(lastGroupIDQuery, function (err, result, fields) {
-                        if(err) {
+                        if (err) {
                             console.log(err);
                             res.status(500).status(err);
                             return;

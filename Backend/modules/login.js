@@ -36,7 +36,7 @@ router.post('/', (req, res) => {
                         let passCheck = bcrypt.compareSync(userPassword, userDBPassword)
                         // let passCheck = true;
                         if (passCheck) {
-                            res.cookie('cookie', userID, { maxAge: 900000, httpOnly: false, path: '/' });
+                            //res.cookie('cookie', userID, { maxAge: 900000, httpOnly: false, path: '/' });
                             req.session.user = result[0];
                             console.log("login success");
                             // res.status(200).send("Login Success");

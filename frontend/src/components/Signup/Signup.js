@@ -79,39 +79,46 @@ class Signup extends Component {
             })
     }
     render() {
+        let redirectVar = null;
+        if(cookie.load('userID')){
+            redirectVar = <Redirect to= "/dashboard"/>
+        }
         return (
-            <BrowserRouter>
-                <div>
+            <div>
+                {redirectVar}
+                <BrowserRouter>
                     <div>
-                        <Navbar />
-                    </div>
-                    <div class="container">
-                        <div class="row div-pad">
-                            <div class="col-3"></div>
-                            <div class="col-3">
-                                <img src={splitwise_logo} width="250" height="250" alt="" />
-                            </div>
-                            <div class="col-3">
-                                <span style={{ color: "#8a8f94" }}><strong>INTRODUCE YOURSELF</strong></span><br /><br />
-                                <form onSubmit={this.submitSignup} method="post">
-                                    <label><strong>Hi there! My name is</strong></label>
-                                    <input class="form-input" onChange={this.nameChangeHandler} type="text" class="form-control" name="name" required></input>
-                                    <br />
-                                    <label><strong>Email address</strong></label>
-                                    <input class="form-input" onChange={this.emailChangeHandler} type="email" class="form-control" name="email" required></input>
-                                    <br />
-                                    <label><strong>Password</strong></label>
-                                    <input class="form-input" onChange={this.passwordChangeHandler} type="password" class="form-control" name="password" required></input>
-                                    <br />
-                                    <button class="btn btn-primary btn-lg" type="submit" style={{ backgroundColor: "#ed752f", border: "none" }}>Sign me up!</button>
-                                </form>
-                                <br/>
-                                {this.state.MsgFlag ? <div class="alert alert-danger" role="alert">{this.state.Msg}</div> : null}
+                        <div>
+                            <Navbar />
+                        </div>
+                        <div class="container">
+                            <div class="row div-pad">
+                                <div class="col-3"></div>
+                                <div class="col-3">
+                                    <img src={splitwise_logo} width="250" height="250" alt="" />
+                                </div>
+                                <div class="col-3">
+                                    <span style={{ color: "#8a8f94" }}><strong>INTRODUCE YOURSELF</strong></span><br /><br />
+                                    <form onSubmit={this.submitSignup} method="post">
+                                        <label><strong>Hi there! My name is</strong></label>
+                                        <input class="form-input" onChange={this.nameChangeHandler} type="text" class="form-control" name="name" required></input>
+                                        <br />
+                                        <label><strong>Email address</strong></label>
+                                        <input class="form-input" onChange={this.emailChangeHandler} type="email" class="form-control" name="email" required></input>
+                                        <br />
+                                        <label><strong>Password</strong></label>
+                                        <input class="form-input" onChange={this.passwordChangeHandler} type="password" class="form-control" name="password" required></input>
+                                        <br />
+                                        <button class="btn btn-primary btn-lg" type="submit" style={{ backgroundColor: "#ed752f", border: "none" }}>Sign me up!</button>
+                                    </form>
+                                    <br/>
+                                    {this.state.MsgFlag ? <div class="alert alert-danger" role="alert">{this.state.Msg}</div> : null}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </BrowserRouter>
+                </BrowserRouter>
+            </div>
         )
     }
 }

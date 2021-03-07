@@ -57,6 +57,8 @@ class Login extends Component {
                         Msg: "login success",
                         userID: response.data.userID
                     })
+                    cookie.save('userID', response.data.userID, { path: '/' })
+                    this.props.history.push("/dashboard")
                 } else if (response.status === 201) {
                     //Invalid credentials
                     console.log(response.data);

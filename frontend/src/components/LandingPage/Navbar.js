@@ -13,12 +13,12 @@ class Navbar extends Component {
     }
 
     handleLogout = () => {
-        cookie.remove('cookie', { path: '/' })
+        cookie.remove('userID', { path: '/' })
     }
 
     render() {
         let navLogin = null;
-        if (cookie.load('cookie')) {
+        if (cookie.load('userID')) {
             console.log("Cookie can be read");
             navLogin = (
                 <ul class="nav nabvar-nav navbar-right">
