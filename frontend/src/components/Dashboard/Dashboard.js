@@ -21,17 +21,19 @@ class Dashboard extends Component {
 
     componentWillMount() {
         this.setState({
-            userID: cookie.load('userID') 
+            userID: parseInt(cookie.load('userID'))
         })
       }
 
     componentDidMount(){
         const data = {
-            userID: this.state.userID
+            "userID": parseInt(cookie.load('userID'))
         }
 
+        console.log(data);
+
         axios.defaults.withCredentials = true;
-        axios.post('http://localhost:3001/dashboard/total_balance', data)
+        axios.get('http://localhost:3001/dashboard/total_balance/'+cookie.load('userID'))
             .then(response => {
                 if(response.state === 200){
                     console.log(response.data);
@@ -40,10 +42,10 @@ class Dashboard extends Component {
                     })
                 }
             }).catch(e => {
-                console.log('Error getting total balance');
+                console.log(e);
             })
         
-            axios.post('http://localhost:3001/dashboard/total_you_owe', data)
+            axios.get('http://localhost:3001/dashboard/total_you_owe/'+cookie.load('userID'))
             .then(response => {
                 if(response.state === 200){
                     console.log(response.data);
@@ -52,10 +54,10 @@ class Dashboard extends Component {
                     })
                 }
             }).catch(e => {
-                console.log('Error getting total you owe');
+                console.log(e);
             })
 
-            axios.post('http://localhost:3001/dashboard/total_you_are_owed', data)
+            axios.get('http://localhost:3001/dashboard/total_you_are_owed/'+cookie.load('userID'))
             .then(response => {
                 if(response.state === 200){
                     console.log(response.data);
@@ -64,10 +66,10 @@ class Dashboard extends Component {
                     })
                 }
             }).catch(e => {
-                console.log('error getting total you are owed');
+                console.log(e);
             })
 
-            axios.post('http://localhost:3001/dashboard/you_are_owed', data)
+            axios.get('http://localhost:3001/dashboard/you_are_owed/'+cookie.load('userID'))
             .then(response => {
                 if(response.state === 200){
                     console.log(response.data);
@@ -76,10 +78,10 @@ class Dashboard extends Component {
                     })
                 }
             }).catch(e => {
-                console.log('error getting you are owed list');
+                console.log(e);
             })
 
-            axios.post('http://localhost:3001/dashboard/you_owe', data)
+            axios.get('http://localhost:3001/dashboard/you_owe/'+cookie.load('userID'))
             .then(response => {
                 if(response.state === 200){
                     console.log(response.data);
@@ -88,7 +90,7 @@ class Dashboard extends Component {
                     })
                 }
             }).catch(e => {
-                console.log('error getting total you owe');
+                console.log(e);
             })
 
     }

@@ -40,6 +40,7 @@ router.post('/', (req, res) => {
                             req.session.user = result[0];
                             console.log("login success");
                             // res.status(200).send("Login Success");
+                            //res.status(200).json({userID: result[0].USER_ID});
                             res.status(200).json({userID: result[0].USER_ID});
 
                         } else {

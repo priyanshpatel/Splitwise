@@ -4,8 +4,9 @@ const router = express.Router();
 // const bcrypt = require('bcrypt');
 const con = require('./database');
 
-router.get('/', (req, res) => {
-    const userID = req.body.userID;
+router.get('/:userID', (req, res) => {
+    //const userID = req.body.userID;
+    const userID = req.params.userID
     const profileViewQuery = "SELECT * FROM USERS WHERE USER_ID = " + userID;
     // console.log(profileViewQuery);
     con.query(profileViewQuery, function (err, result, fields) {
@@ -14,7 +15,7 @@ router.get('/', (req, res) => {
         } else {
             console.log(result[0]);
             res.status(200).json({
-                userID: result[0].USER_ID,
+                'userID': result[0].USER_ID,
                 'userEmail': result[0].USER_EMAIL,
                 'userName': result[0].USER_NAME,
                 'phoneNumber': result[0].PHONE_NUMBER,
