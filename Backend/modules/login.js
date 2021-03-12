@@ -41,7 +41,16 @@ router.post('/', (req, res) => {
                             console.log("login success");
                             // res.status(200).send("Login Success");
                             //res.status(200).json({userID: result[0].USER_ID});
-                            res.status(200).json({userID: result[0].USER_ID});
+                            res.status(200).json({
+                                userID: result[0].USER_ID,
+                                userEmail: result[0].USER_EMAIL,
+                                userName: result[0].USER_NAME,
+                                phoneNumber: result[0].PHONE_NUMBER,
+                                timezone: result[0].TIMEZONE,
+                                currency: result[0].CURRENCY,
+                                language: result[0].LANGUAGE,
+                                profilePicture: result[0].PROFILE_PICTURE
+                            });
 
                         } else {
                             res.status(201).send("Login Failed");

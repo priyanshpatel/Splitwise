@@ -8,7 +8,8 @@ import Navbar from './LandingPage/Navbar';
 import LandingPage from './LandingPage/LandingPage';
 import Login from './Login/Login';
 import Signup from './Signup/Signup';
-import Dashboard from './Dashboard/Dashboard'
+import Dashboard from './Dashboard/Dashboard';
+import Profile from './Profile/Profile';
 //Create a Main Component
 class Main extends Component {
     render(){
@@ -19,6 +20,7 @@ class Main extends Component {
                 {<Route path="/login" component={Login}/>}
                 {<Route path="/signup" component={Signup}/>}
                 {<Route path="/dashboard" component={Dashboard}/>}
+                {<Route path="/profile" component={Profile} />}
                 {/* // <Route path="/home" component={Home}/>
                 // <Route path="/delete" component={Delete}/>
                 // <Route path="/create" component={Create}/> */}

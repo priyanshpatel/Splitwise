@@ -58,6 +58,13 @@ class Login extends Component {
                         userID: response.data.userID
                     })
                     cookie.save('userID', response.data.userID, { path: '/' })
+                    cookie.save('userEmail', response.data.userEmail, { path: '/' })
+                    cookie.save('userName', response.data.userName, { path: '/' })
+                    cookie.save('phoneNumber', response.data.phoneNumber, { path: '/' })
+                    cookie.save('timezone', response.data.timezone, { path: '/' })
+                    cookie.save('currency', response.data.currency, { path: '/' })
+                    cookie.save('language', response.data.language, { path: '/' })
+                    cookie.save('profilePicture', response.data.profilePicture, { path: '/' })
                     this.props.history.push("/dashboard")
                 } else if (response.status === 201) {
                     //Invalid credentials

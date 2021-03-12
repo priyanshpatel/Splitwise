@@ -13,6 +13,7 @@ router.get('/:userID', (req, res) => {
         if (err) {
             res.status(500).send('Error');
         } else {
+            console.log("=========View Profile Backend=========");
             console.log(result[0]);
             res.status(200).json({
                 'userID': result[0].USER_ID,
@@ -31,7 +32,7 @@ router.get('/:userID', (req, res) => {
 router.post('/update', (req, res) => {
     const userID = req.body.userID;
     const userName = req.body.userName;
-    const userEmail = req.body.userName;
+    const userEmail = req.body.userEmail;
     const phoneNumber = req.body.phoneNumber;
     const currency = req.body.currency;
     const timezone = req.body.timezone;
@@ -45,8 +46,11 @@ router.post('/update', (req, res) => {
 
     con.query(updateProfileQuery, function (err, result, fields) {
         if (err) {
-            res.status(500).send('Error');
-            throw err;
+            if (err.errno== 1062) {
+                res.status(201).send('Email ID already exists');
+            } else{
+                res.status(500).send('Error');
+            }
         } else {
             res.status(200).send("Profile Updated Successfully");
         }
