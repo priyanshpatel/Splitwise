@@ -54,7 +54,7 @@ router.post('/create', (req, res) => {
                             return;
                         }
                         for (let i = 0; i < groupMembers.length; i++) {
-                            const memUserID = req.body.groupMembers[i].userID;
+                            const memUserID = req.body.groupMembers[i].value;
                             const memAddQuery = "INSERT INTO USER_GROUP_MAP(USER_ID, GROUP_ID, ADDED_BY, ADDED_DATE, INVITE_FLAG) SELECT " + memUserID + ", EXPENSE_GROUPS.GROUP_ID, " + userID + ", '" + ts + "', 'P' FROM EXPENSE_GROUPS WHERE EXPENSE_GROUPS.GROUP_NAME = '" + groupName + "'";
                             console.log(memAddQuery);
                             con.query(memAddQuery, function (err, result, fields) {
