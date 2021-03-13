@@ -77,10 +77,10 @@ router.post('/create', (req, res) => {
 
 });
 
-router.get('/mygroups', (req, res) => {
-    const userID = req.body.userID
-
-    const groupCountQuery = "SELECT COUNT(0) AS COUNT FROM USER_GROUP_MAP WHERE USER_ID = " + userID
+router.get('/mygroups/:userID', (req, res) => {
+    //const userID = req.body.userID
+    const userID = req.params.userID
+    const groupCountQuery = "SELECT COUNT(0) AS COUNT FROM USER_GROUP_MAP WHERE INVITE_FLAG = 'A' AND USER_ID = " + userID
     console.log(groupCountQuery);
 
     con.query(groupCountQuery, function (err, result, fields) {
@@ -89,11 +89,45 @@ router.get('/mygroups', (req, res) => {
             res.status(500).send("Error");
             return;
         } else if (result[0].COUNT < 1) {
-            console.log("User is not part of any group.");
-            res.status(201).send("You are not part of any group");
+            console.log("User is not part of any group");
+            res.status(201).send("You are not a part of any group");
             return;
         } else {
-            const getGroupsQuery = "SELECT E.GROUP_NAME, E.GROUP_ID FROM EXPENSE_GROUPS E, USER_GROUP_MAP U WHERE E.GROUP_ID = U.GROUP_ID AND U.USER_ID = " + userID
+            const getGroupsQuery = "SELECT E.GROUP_NAME, E.GROUP_ID, U.INVITE_FLAG FROM EXPENSE_GROUPS E, USER_GROUP_MAP U WHERE E.GROUP_ID = U.GROUP_ID AND U.INVITE_FLAG = 'A' AND U.USER_ID = " + userID
+            console.log(getGroupsQuery);
+            con.query(getGroupsQuery, function (err, result, fields) {
+                if (err) {
+                    console.log("error getting groups");
+                    res.status(500).send("error getting groups");
+                    return;
+                } else {
+                    console.log(result);
+                    res.status(200).send(result);
+                }
+            });
+        }
+    });
+
+});
+
+router.get('/mygroupspending/:userID', (req, res) => {
+    //const userID = req.body.userID
+    const userID = req.params.userID
+    const groupCountQuery = "SELECT COUNT(0) AS COUNT FROM USER_GROUP_MAP WHERE INVITE_FLAG = 'P' AND USER_ID = " + userID
+    //const groupCountQuery = "SELECT COUNT(0) AS COUNT FROM USER_GROUP_MAP WHERE USER_ID = " + userID
+    console.log(groupCountQuery);
+
+    con.query(groupCountQuery, function (err, result, fields) {
+        if (err) {
+            console.log("Group count error");
+            res.status(500).send("Error");
+            return;
+        } else if (result[0].COUNT < 1) {
+            console.log("User does not have any pending invites");
+            res.status(201).send("You do not have any pending invites");
+            return;
+        } else {
+            const getGroupsQuery = "SELECT E.GROUP_NAME, E.GROUP_ID, U.INVITE_FLAG FROM EXPENSE_GROUPS E, USER_GROUP_MAP U WHERE E.GROUP_ID = U.GROUP_ID AND U.INVITE_FLAG = 'P' AND U.USER_ID = " + userID
             console.log(getGroupsQuery);
             con.query(getGroupsQuery, function (err, result, fields) {
                 if (err) {
