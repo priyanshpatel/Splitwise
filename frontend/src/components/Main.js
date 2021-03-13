@@ -10,6 +10,7 @@ import Login from './Login/Login';
 import Signup from './Signup/Signup';
 import Dashboard from './Dashboard/Dashboard';
 import Profile from './Profile/Profile';
+import CreateGroup from './Groups/CreateGroup';
 //Create a Main Component
 class Main extends Component {
     render(){
@@ -21,6 +22,7 @@ class Main extends Component {
                 {<Route path="/signup" component={Signup}/>}
                 {<Route path="/dashboard" component={Dashboard}/>}
                 {<Route path="/profile" component={Profile} />}
+                {<Route path="/creategroup" component={CreateGroup} />}
                 {/* // <Route path="/home" component={Home}/>
                 // <Route path="/delete" component={Delete}/>
                 // <Route path="/create" component={Create}/> */}

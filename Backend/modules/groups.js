@@ -189,4 +189,25 @@ router.post('/update', (req, res) => {
     });
 });
 
+router.get('/search/users', (req, res) => {
+    //const userID = req.body.userID;
+    const userInput = req.query.keyword
+    const userSearchQuery = "SELECT USER_ID, USER_EMAIL, USER_NAME FROM USERS WHERE USER_NAME LIKE '%"+userInput+"%' OR USER_EMAIL LIKE '%"+userInput+"%'";
+    // console.log(profileViewQuery);
+    con.query(userSearchQuery, function (err, users, fields) {
+        if (err) {
+            res.status(500).send('Error');
+        } else {
+            console.log("=========Search User Backend=========");
+            console.log(users);
+            res.status(200).json({
+                // 'userID': result[0].USER_ID,
+                // 'userEmail': result[0].USER_EMAIL,
+                // 'userName': result[0].USER_NAME,
+                users
+            });
+        }
+    });
+});
+
 module.exports = router;
