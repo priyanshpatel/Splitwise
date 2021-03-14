@@ -158,8 +158,9 @@ router.post('/acceptrejectinvite', (req, res) => {
             res.status(500).send("Error updating Invite");
             return;
         } else {
-            console.log(result);
-            res.status(200).send(result);
+            console.log(result.affectedRows);
+            const queryResult = result.affectedRows;
+            res.status(200).json({"rowsAffected": queryResult});
         }
     });
 

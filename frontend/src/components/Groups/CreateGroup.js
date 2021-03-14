@@ -55,7 +55,7 @@ class CreateGroup extends Component {
 
     groupSave = (e) => {
         e.preventDefault();
-        if (this.state.groupMembers == null){
+        if (this.state.groupMembers == null) {
             this.setState({
                 MsgFlag: true,
                 errorMessage: "Please select group members"
@@ -78,7 +78,7 @@ class CreateGroup extends Component {
                     if (response.state === 200) {
                         this.setState({
                             authFlag: true,
-                            MsgFlag: false  
+                            MsgFlag: false
                         })
                         console.log("Group successfully created");
                         //window.location.assign('/profile/' + cookie.load('userID'))
@@ -100,7 +100,7 @@ class CreateGroup extends Component {
                         errorMessage: e
                     })
                 })
-            }
+        }
     }
 
     usersChangeHandler = (e) => {
@@ -111,44 +111,51 @@ class CreateGroup extends Component {
     }
 
     render() {
+        let redirectVar = null;
+        if (!cookie.load('userID')) {
+            redirectVar = <Redirect to="/" />
+        }
         return (
-            <BrowserRouter>
-                <div>
-                    <Navbar />
-                </div>
-                <div class="container">
-                    <div class="row div-pad">
-                        <div class="col-3"></div>
-                        <div class="col-3">
-                            <input
-                                accept="image/x-png,image/gif,image/jpeg"
-                                type="file"
-                                name="profileImage"
-                            />
-                        </div>
-                        <div class="col-3">
-                            <span style={{ color: "#8a8f94" }}><strong>START A NEW GROUP</strong></span>
-                            <form onSubmit={this.groupSave} method="post">
-                                <label for="groupName"><strong>My group shall be called...</strong></label>
-                                <input class="form-input" style={{ fontWeight: "bold" }} onChange={this.groupNameChangeHandler} type="text" id="groupName" class="form-control" name="groupName" required></input>
-                                <br />
-                                <label><strong>GROUP MEMBERS</strong></label>
-                                <AsyncSelect
-                                    isMulti
-                                    value={this.state.users}
-                                    onChange={this.usersChangeHandler}
-                                    placeholder={"Search by name or email"}
-                                    loadOptions={this.searchOptions}
+            <div>
+                {redirectVar}
+                <BrowserRouter>
+                    <div>
+                        <Navbar />
+                    </div>
+                    <div class="container">
+                        <div class="row div-pad">
+                            <div class="col-3"></div>
+                            <div class="col-3">
+                                <input
+                                    accept="image/x-png,image/gif,image/jpeg"
+                                    type="file"
+                                    name="profileImage"
                                 />
-                                <br />
-                                <button class="btn btn-primary" type="submit" style={{ backgroundColor: "#ed752f", border: "none" }}>Save</button>
-                                <br/><br/>
-                                {this.state.MsgFlag ? <div class="alert alert-danger" role="alert">{this.state.errorMessage}</div> : null}
-                            </form>
+                            </div>
+                            <div class="col-3">
+                                <span style={{ color: "#8a8f94" }}><strong>START A NEW GROUP</strong></span>
+                                <form onSubmit={this.groupSave} method="post">
+                                    <label for="groupName"><strong>My group shall be called...</strong></label>
+                                    <input class="form-input" style={{ fontWeight: "bold" }} onChange={this.groupNameChangeHandler} type="text" id="groupName" class="form-control" name="groupName" required></input>
+                                    <br />
+                                    <label><strong>GROUP MEMBERS</strong></label>
+                                    <AsyncSelect
+                                        isMulti
+                                        value={this.state.users}
+                                        onChange={this.usersChangeHandler}
+                                        placeholder={"Search by name or email"}
+                                        loadOptions={this.searchOptions}
+                                    />
+                                    <br />
+                                    <button class="btn btn-primary" type="submit" style={{ backgroundColor: "#ed752f", border: "none" }}>Save</button>
+                                    <br /><br />
+                                    {this.state.MsgFlag ? <div class="alert alert-danger" role="alert">{this.state.errorMessage}</div> : null}
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </BrowserRouter>
+                </BrowserRouter>
+            </div>
         )
     }
 }

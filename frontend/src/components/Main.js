@@ -11,6 +11,8 @@ import Signup from './Signup/Signup';
 import Dashboard from './Dashboard/Dashboard';
 import Profile from './Profile/Profile';
 import CreateGroup from './Groups/CreateGroup';
+import MyGroups from './Groups/MyGroups';
+import PendingGroups from './Groups/PendingGroups';
 //Create a Main Component
 class Main extends Component {
     render(){
@@ -23,6 +25,7 @@ class Main extends Component {
                 {<Route path="/dashboard" component={Dashboard}/>}
                 {<Route path="/profile" component={Profile} />}
                 {<Route path="/creategroup" component={CreateGroup} />}
+                {<Route path="/mygroups" component={MyGroups} />}
                 {/* // <Route path="/home" component={Home}/>
                 // <Route path="/delete" component={Delete}/>
                 // <Route path="/create" component={Create}/> */}
