@@ -36,10 +36,9 @@ class PendingGroups extends Component {
 
     render() {
         return (
-            <div class="card" style={{ width: '38rem' }}>
+            <div class="card text-dark bg-light mb-3" style={{ width: '38rem' }}>
                 <div class="card-body">
-                    <h5 class="card-title">{this.state.GROUP_NAME}</h5>
-                    <a href="#" class="btn btn-outline-primary">Details</a>&nbsp;
+                    <h6 class="card-title"><strong>{this.state.GROUP_NAME}</strong></h6>
                     <a href="" onClick={this.props.acceptInvite.bind(this, this.state)} class="btn btn-outline-success">Accept</a>&nbsp;
                     <a href="" onClick={this.props.rejectInvite.bind(this, this.state)} class="btn btn-outline-secondary">Reject</a>
                 </div>

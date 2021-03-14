@@ -20,7 +20,8 @@ class MyGroups extends Component {
             authFlag: null,
             MsgFlag: false,
             acceptFlag: null,
-            rejectFlag: null
+            rejectFlag: null,
+            searchInput: null
         }
         this.acceptInvite = this.acceptInvite.bind(this);
         this.rejectInvite = this.rejectInvite.bind(this);
@@ -78,8 +79,8 @@ class MyGroups extends Component {
                     console.log("===========inside mygroups 201==============");
                     console.log(response.data);
                     //this.setState({
-                        //MsgFlag: true,
-                        //errorMessage: 'No groups to display'
+                    //MsgFlag: true,
+                    //errorMessage: 'No groups to display'
                     //});
                 }
             }).catch(e => {
@@ -87,6 +88,12 @@ class MyGroups extends Component {
                 console.log(e);
             })
     }
+
+    groupSearch = (e) => {
+        this.setState({
+            searchInput: e.target.value
+        });
+    };
 
     // Remove Invite
     rejectInvite = (group) => {
@@ -165,11 +172,21 @@ class MyGroups extends Component {
 
     render() {
         let redirectVar = null;
-        let pendingInvites = <div>No pending Invites</div>;
-        let acceptedInvites = <div>No groups to show</div>;
         if (!cookie.load('userID')) {
             redirectVar = <Redirect to="/" />
         };
+
+        let pendingInvites = <div>No pending Invites</div>;
+        let acceptedInvites = <div>No groups to show</div>;
+
+        let searchedGroups = this.state.acceptedInvites.filter((group) => {
+            if(group.GROUP_NAME!=null && this.state.searchInput != null){
+                return group.GROUP_NAME.toLowerCase().includes(this.state.searchInput.toLowerCase());
+            } else {
+                return true
+            }
+        })
+
         if (this.state.pendingInvites != null) {
             pendingInvites = this.state.pendingInvites.map((invite) => {
                 // return <div class="p-3 border bg-light">{invite}</div>;
@@ -190,6 +207,16 @@ class MyGroups extends Component {
                 />
             })
         }
+
+        if (this.state.searchInput != null){
+            acceptedInvites = searchedGroups.map((invite) => {
+                return <AcceptedGroups
+                    key={invite.GROUP_ID}
+                    data={invite}
+                    leaveGroup={this.leaveGroup}
+                />
+            })
+        }
         return (
             <div>
                 {redirectVar}
@@ -200,16 +227,16 @@ class MyGroups extends Component {
                     <br />
                     <div class="container">
                         <h3><strong>My groups</strong></h3>
-                        <br />
+                        <hr/>
                         <div class="row">
                             <div class="col-3">
-                                <h3>Pending Invites</h3>
+                                <h4 style={{ color: "#8a8f94" }}><strong>Pending Invites</strong></h4>
                             </div>
                             <div class="col-3">
 
                             </div>
                             <div class="col-5">
-                                <h3>Groups</h3>
+                                <h4 style={{ color: "#8a8f94" }}><strong>Groups</strong></h4>
                             </div>
                             <div class="col-1">
 
@@ -219,12 +246,23 @@ class MyGroups extends Component {
                         <div class="overflow-hidden">
                             <div class="row gy-5">
                                 <div class="col-6">
+                                    <p></p>
                                     {pendingInvites}
                                     {this.state.MsgFlag ? <div class="alert alert-success" role="alert">{this.state.errorMessage}</div> : null}
                                     {/* <div class="p-3 border bg-light">Custom column padding 1</div>
                                     <div class="p-3 border bg-light">Custom column padding 11</div> */}
                                 </div>
                                 <div class="col-6">
+                                    {/* <input type="text" name="searchInput" onChange={this.groupSearch} placeholder="Group Search" /> */}
+                                    <p></p>
+                                    <div class="input-group rounded">
+                                        <input type="search" name="searchInput" onChange={this.groupSearch} class="form-control rounded" placeholder="Search" aria-label="Search"
+                                            aria-describedby="search-addon" style={{ fontWeight: "bold" }}/>
+                                        <span class="input-group-text border-0" id="search-addon">
+                                            <i class="fa fa-search"></i>
+                                        </span>
+                                    </div>
+                                    <br />
                                     {acceptedInvites}
                                     {/* <div class="p-3 border bg-light">Custom column padding 111</div>
                                     <div class="p-3 border bg-light">Custom column padding 1111</div> */}

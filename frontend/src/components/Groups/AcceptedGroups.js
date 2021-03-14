@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Link } from 'react-router-dom';
+import { BrowserRouter, Link, NavLink } from 'react-router-dom';
 import cookie, { plugToRequest } from 'react-cookies';
 import { Redirect } from 'react-router';
 import Navbar from '../LandingPage/Navbar';
 import axios from 'axios';
 import AsyncSelect from "react-select/async";
+import PropTypes from 'prop-types';
+import { Button } from 'semantic-ui-react'
 
 class AcceptedGroups extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            // groupID: this.props.data.GROUP_ID,
-            // groupName: this.props.data.GROUP_NAME,
-            // inviteFlag: this.props.data.INVITE_FLAG
-
             GROUP_NAME: this.props.data.GROUP_NAME,
             GROUP_ID: this.props.data.GROUP_ID,
             INVITE_FLAG: this.props.data.INVITE_FLAG
@@ -29,16 +27,15 @@ class AcceptedGroups extends Component {
 
     render() {
         return (
-            <div class="card" style={{width: '38rem'}}>
+            <BrowserRouter>
+            <div class="card text-dark bg-light mb-3" style={{width: '38rem'}}>
                 <div class="card-body">
-                    <h5 class="card-title">{this.state.GROUP_NAME}</h5>
-                    <a href="#" class="btn btn-outline-primary">Details</a>&nbsp;
+                    <h6 class="card-title"><strong>{this.state.GROUP_NAME}</strong></h6>
+                    <a href={"/grouppage/"+this.state.GROUP_ID} class="btn btn-outline-primary">Details</a>&nbsp;
                     <a href="" class="btn btn-outline-danger">Leave</a>
-                    {/* <a href="#" class="btn btn-outline-primary">Details</a>&nbsp;
-                    <a href="#" class="btn btn-outline-success">Accept</a>&nbsp;
-                    <a href="#" class="btn btn-outline-secondary">Reject</a> */}
                 </div>
             </div>
+            </BrowserRouter>
         )
     }
 }

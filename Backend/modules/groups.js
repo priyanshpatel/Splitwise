@@ -185,8 +185,8 @@ router.post('/leave', (req, res) => {
     });
 })
 
-router.get('/groupdetails', (req, res) => {
-    const groupID = req.body.groupID;
+router.get('/groupdetails/:groupID', (req, res) => {
+    const groupID = req.params.groupID;
 
     const getGroupDetailsQuery = "SELECT * FROM EXPENSE_GROUPS WHERE GROUP_ID = " + groupID
 
@@ -259,6 +259,18 @@ router.get('/search/groups/:userID', (req, res) => {
             res.status(200).json({
                 groups
             });
+        }
+    });
+});
+
+router.get('/groupexpense/:groupID', (req, res) => {
+    const groupID = req.params.groupID
+    const groupExpenseQuery = "SELECT UGM.GROUP_ID, UGM.USER_ID , U.USER_NAME, (SELECT SUM(T.AMOUNT) FROM `TRANSACTION` T WHERE T.GROUP_ID = UGM.GROUP_ID AND T.PAID_BY_USER_ID = UGM.USER_ID AND T.TRAN_TYPE = 6 AND T.SETTLED_FLAG = 'N') - (SELECT SUM(T.AMOUNT) FROM `TRANSACTION` T WHERE T.GROUP_ID = UGM.GROUP_ID AND T.PAID_FOR_USER_ID = UGM.USER_ID AND T.TRAN_TYPE = 6 AND T.SETTLED_FLAG = 'N') AS OWE_AMOUNT FROM USER_GROUP_MAP UGM, USERS U WHERE U.USER_ID = UGM.USER_ID AND UGM.GROUP_ID = " + groupID
+    con.query(groupExpenseQuery, function (err, result, fields) {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.status(200).send(result);
         }
     });
 });
