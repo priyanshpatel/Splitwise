@@ -160,7 +160,7 @@ router.post('/acceptrejectinvite', (req, res) => {
         } else {
             console.log(result.affectedRows);
             const queryResult = result.affectedRows;
-            res.status(200).json({"rowsAffected": queryResult});
+            res.status(200).json({ "rowsAffected": queryResult });
         }
     });
 
@@ -227,7 +227,7 @@ router.post('/update', (req, res) => {
 router.get('/search/users', (req, res) => {
     //const userID = req.body.userID;
     const userInput = req.query.keyword
-    const userSearchQuery = "SELECT USER_ID, USER_EMAIL, USER_NAME FROM USERS WHERE USER_NAME LIKE '%"+userInput+"%' OR USER_EMAIL LIKE '%"+userInput+"%'";
+    const userSearchQuery = "SELECT USER_ID, USER_EMAIL, USER_NAME FROM USERS WHERE USER_NAME LIKE '%" + userInput + "%' OR USER_EMAIL LIKE '%" + userInput + "%'";
     // console.log(profileViewQuery);
     con.query(userSearchQuery, function (err, users, fields) {
         if (err) {
@@ -240,6 +240,24 @@ router.get('/search/users', (req, res) => {
                 // 'userEmail': result[0].USER_EMAIL,
                 // 'userName': result[0].USER_NAME,
                 users
+            });
+        }
+    });
+});
+
+router.get('/search/groups/:userID', (req, res) => {
+    const userID = req.params.userID
+    const userInput = req.query.keyword
+    // const groupSearchQuery = "SELECT USER_ID, USER_EMAIL, USER_NAME FROM USERS WHERE USER_NAME LIKE '%"+userInput+"%' OR USER_EMAIL LIKE '%"+userInput+"%'";
+    const groupSearchQuery = "SELECT E.GROUP_ID, E.GROUP_NAME FROM EXPENSE_GROUPS E, USER_GROUP_MAP U WHERE E.GROUP_NAME LIKE '%" + userInput + "%' AND E.GROUP_ID = U.GROUP_ID AND U.INVITE_FLAG = 'A' AND U.USER_ID = " + userID;
+    con.query(groupSearchQuery, function (err, groups, fields) {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            console.log("=========Search Group Backend=========");
+            console.log(groups);
+            res.status(200).json({
+                groups
             });
         }
     });
