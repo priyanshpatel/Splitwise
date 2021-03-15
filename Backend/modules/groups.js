@@ -263,9 +263,21 @@ router.get('/search/groups/:userID', (req, res) => {
     });
 });
 
-router.get('/groupexpense/:groupID', (req, res) => {
+router.get('/groupbalances/:groupID', (req, res) => {
     const groupID = req.params.groupID
     const groupExpenseQuery = "SELECT UGM.GROUP_ID, UGM.USER_ID , U.USER_NAME, (SELECT SUM(T.AMOUNT) FROM `TRANSACTION` T WHERE T.GROUP_ID = UGM.GROUP_ID AND T.PAID_BY_USER_ID = UGM.USER_ID AND T.TRAN_TYPE = 6 AND T.SETTLED_FLAG = 'N') - (SELECT SUM(T.AMOUNT) FROM `TRANSACTION` T WHERE T.GROUP_ID = UGM.GROUP_ID AND T.PAID_FOR_USER_ID = UGM.USER_ID AND T.TRAN_TYPE = 6 AND T.SETTLED_FLAG = 'N') AS OWE_AMOUNT FROM USER_GROUP_MAP UGM, USERS U WHERE U.USER_ID = UGM.USER_ID AND UGM.GROUP_ID = " + groupID
+    con.query(groupExpenseQuery, function (err, result, fields) {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.status(200).send(result);
+        }
+    });
+});
+
+router.get('/groupexpenses/:groupID', (req, res) => {
+    const groupID = req.params.groupID
+    const groupExpenseQuery = "SELECT E.*, U.USER_NAME FROM EXPENSES E, USERS U WHERE U.USER_ID = E.PAID_BY_USER_ID AND E.GROUP_ID = "+ groupID +" ORDER BY EXP_ID DESC"
     con.query(groupExpenseQuery, function (err, result, fields) {
         if (err) {
             res.status(500).send(err);
