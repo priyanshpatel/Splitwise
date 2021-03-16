@@ -15,7 +15,7 @@ const customStyles = {
       right: "auto",
       bottom: "auto",
       marginRight: "-50%",
-      height: "400px",
+      height: "250px",
       width: "500px",
       transform: "translate(-50%, -50%)",
     },
@@ -31,7 +31,7 @@ class Dashboard extends Component {
             totalYouAreOwed: null,
             youOweList: [],
             youAreOwedList: [],
-            settlePopUp: false
+            settleUpPopUp: false
         }
     }
 
@@ -117,6 +117,14 @@ class Dashboard extends Component {
 
     }
 
+    toggleSettleUp = () => {
+        console.log("ADD EXPENSE");
+        console.log(this.state.settleUpPopUp);
+        this.setState({
+            settleUpPopUp: !this.state.settleUpPopUp
+        })
+    }
+
 
     render() {
         console.log("INSIDE RENDER>>>>>>>>>>>>>>>>>>");
@@ -172,7 +180,7 @@ class Dashboard extends Component {
 
                             </div>
                             <div class="col-3" style={{ textAlign: "right" }}>
-                                <button class="btn btn-primary btn-md" style={{ backgroundColor: "#59cfa7", border: "none" }}><strong>Settle up</strong></button>
+                                <button class="btn btn-primary btn-md" onClick={this.toggleSettleUp} style={{ backgroundColor: "#59cfa7", border: "none" }}><strong>Settle up</strong></button>
                             </div>
                         </div>
                         <div class="row" style={{ borderTop: "1px solid #a3a2a2"}}>
@@ -229,6 +237,9 @@ class Dashboard extends Component {
                                 {youAreOwedList}
                             </div>
                         </div>
+                        <Modal style={customStyles} isOpen={this.state.settleUpPopUp} ariaHideApp={false}>
+                        <Settle data = {this.state} closePopUp={this.toggleSettleUp} />
+                    </Modal>
                     </div>
                 </BrowserRouter>
             </div>
