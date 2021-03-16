@@ -1,5 +1,6 @@
 'use strict';
 const express = require('express');
+const { CLIENT_RENEG_LIMIT } = require('tls');
 const router = express.Router();
 const con = require('./database');
 
@@ -7,6 +8,9 @@ router.get('/recent_activity/:userID/:groupID/:sortFlag', (req, res) => {
     const userID = req.params.userID
     const groupID = req.params.groupID
     const sortFlag = req.params.sortFlag
+    console.log(userID);
+    console.log(groupID);
+    console.log(sortFlag);
     let sortAppend = ""
     let groupAppend = ""
 

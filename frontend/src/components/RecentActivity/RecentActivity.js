@@ -78,7 +78,7 @@ class RecentActivity extends Component {
         this.setState({
             groupSort: e.target.value
         })
-        axios.get('http://localhost:3001/activities/recent_activity/' + cookie.load('userID') + '/' + this.state.groupSort + '/' + this.state.sort)
+        axios.get('http://localhost:3001/activities/recent_activity/' + cookie.load('userID') + '/' + e.target.value + '/' + this.state.sort)
             .then(response => {
                 if (response.status === 200) {
                     this.setState({
@@ -134,8 +134,8 @@ class RecentActivity extends Component {
                             <div class="input-group mb-3">
                                 <select class="form-select" style={{ fontWeight: "bold" }} aria-label="user select" onChange={this.handleSort}>
                                     <option selected>Sort</option>
-                                    <option value="1">Oldest first</option>
-                                    <option value="2">Newest first</option>
+                                    <option value="1">Newest first</option>
+                                    <option value="2">Oldest first</option>
                                 </select>
                             </div>
                         </div>
