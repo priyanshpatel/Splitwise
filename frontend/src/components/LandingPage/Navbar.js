@@ -60,11 +60,11 @@ class Navbar extends Component {
             return (
                 <div>
                     <nav class="navbar navbar-expand-lg navbar-light" style={{
-            background: "#D32323",
-            background: "#59cfa7",
-            width: "100%",
-            height: "50px",
-          }}>
+                        background: "#D32323",
+                        background: "#59cfa7",
+                        width: "100%",
+                        height: "50px",
+                    }}>
                         <div class="container">
                             <a class="navbar-brand" href="#">
                                 {/* <img src="https://lh3.googleusercontent.com/proxy/u5Jk4tgNiM-h3mYXjxrqeDClx4Qp5tyiMvrAdPrqaoaBt_obioNdG1FX1wL6K8yKsUyYpPEbp-zfcxeynL4K-RQiQ5hW-QBJWMURbAsn_NkqaFuOH0I" width="40" height="40" class="d-inline-block align-top" alt=""/> */}
@@ -77,16 +77,17 @@ class Navbar extends Component {
                                         <em>{cookie.load('userName')}</em>
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="/">Dashboard</a></li>
+                                        <li><a class="dropdown-item" href="/">Dashboard</a></li>
+                                        <li><a class="dropdown-item" href="/recentactivity">Recent activity</a></li>
                                         <li><a class="dropdown-item" href="/profile">Your account</a></li>
                                         <li><a class="dropdown-item" href="/mygroups">My groups</a></li>
                                         <li><a class="dropdown-item" href="/creategroup">Create a group</a></li>
-                                        <li><hr class="dropdown-divider"/></li>
-                                            <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                </ul>
-                                    </li>
+                                        <li><hr class="dropdown-divider" /></li>
+                                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                    </ul>
+                                </li>
 
-                                    <a class="btn btn-primary" type="button" href="/" onClick={this.handleLogout} style={{ backgroundColor: "#59cfa7", border: "none" }}>Logout</a>
+                                <a class="btn btn-primary" type="button" href="/" onClick={this.handleLogout} style={{ backgroundColor: "#59cfa7", border: "none" }}>Logout</a>
                             </ul>
                         </div>
                     </nav>
@@ -94,21 +95,21 @@ class Navbar extends Component {
             )
         } else {
             return (
-                    <div>
-                        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                            <div class="container">
-                                <a class="navbar-brand" href="#">
-                                    {/* <img src="https://lh3.googleusercontent.com/proxy/u5Jk4tgNiM-h3mYXjxrqeDClx4Qp5tyiMvrAdPrqaoaBt_obioNdG1FX1wL6K8yKsUyYpPEbp-zfcxeynL4K-RQiQ5hW-QBJWMURbAsn_NkqaFuOH0I" width="40" height="40" class="d-inline-block align-top" alt=""/> */}
-                                    <img src={splitwise_logo} width="40" height="40" class="d-inline-block align-top" alt="" href="/" />
-                                    <span style={{ paddingLeft: "10px" }}><strong>Splitwise</strong></span>
-                                </a>
-                                <nav class="navbar navbar-light bg-light">
-                                    <a class="nav-link landing-link" href="/login" style={{ color: "#59cfa7" }}><strong>Login</strong></a>
-                                    <a class="btn btn-primary" type="button" href="/signup" style={{ backgroundColor: "#59cfa7", border: "none" }}>Sign up</a>
-                                </nav>
-                            </div>
-                        </nav>
-                    </div>
+                <div>
+                    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                        <div class="container">
+                            <a class="navbar-brand" href="#">
+                                {/* <img src="https://lh3.googleusercontent.com/proxy/u5Jk4tgNiM-h3mYXjxrqeDClx4Qp5tyiMvrAdPrqaoaBt_obioNdG1FX1wL6K8yKsUyYpPEbp-zfcxeynL4K-RQiQ5hW-QBJWMURbAsn_NkqaFuOH0I" width="40" height="40" class="d-inline-block align-top" alt=""/> */}
+                                <img src={splitwise_logo} width="40" height="40" class="d-inline-block align-top" alt="" href="/" />
+                                <span style={{ paddingLeft: "10px" }}><strong>Splitwise</strong></span>
+                            </a>
+                            <nav class="navbar navbar-light bg-light">
+                                <a class="nav-link landing-link" href="/login" style={{ color: "#59cfa7" }}><strong>Login</strong></a>
+                                <a class="btn btn-primary" type="button" href="/signup" style={{ backgroundColor: "#59cfa7", border: "none" }}>Sign up</a>
+                            </nav>
+                        </div>
+                    </nav>
+                </div>
             )
         }
     }
