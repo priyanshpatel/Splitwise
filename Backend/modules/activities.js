@@ -45,4 +45,41 @@ router.get('/recent_activity/:userID/:groupID/:sortFlag', (req, res) => {
 
 });
 
+router.post('/settleup', (req, res) => {
+    let userID1 = req.body.userID1
+    let userID2 = req.body.userID2
+    let swap = null
+    if (userID2 < userID1) {
+        swap = userID1
+        userID1 = userID2
+        userID2 = swap
+    }
+
+    const updateDebtsQuery = "UPDATE DEBTS SET AMOUNT = 0 WHERE USER_ID_1 = " + userID1 + " AND USER_ID_2 = "+ userID2;
+    const updateTransactionQuery = "UPDATE `TRANSACTION` SET SETTLED_FLAG = 'Y' WHERE (PAID_BY_USER_ID = " + userID1 + " OR PAID_FOR_USER_ID = "+ userID1 +") AND (PAID_BY_USER_ID = " + userID2 + " OR PAID_FOR_USER_ID = "+ userID2 +")";
+    console.log(updateDebtsQuery);
+    console.log(updateTransactionQuery);
+
+    con.query(updateDebtsQuery, function (err, result, fields) {
+        if (err) {
+            console.log(err);
+            res.status(500).send('Error');
+            return;
+        } else {
+            console.log("update debts successful");
+            con.query(updateTransactionQuery, function (err, result, fields) {
+                if (err) {
+                    console.log(err);
+                    res.status(500).send('Error');
+                    return;
+                } else {
+                    console.log("update transaction successful");
+                }
+            });
+            res.status(200).send(result)
+        }
+    });
+ 
+});
+
 module.exports = router;
