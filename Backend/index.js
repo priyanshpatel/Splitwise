@@ -40,6 +40,7 @@ const profile = require('./modules/profile')
 const groups = require('./modules/groups')
 const expenses = require('./modules/expenses')
 const dashboard = require('./modules/dashboard')
+const activities = require('./modules/activities')
 
 app.use('/login', login)
 app.use('/signup', signup)
@@ -47,6 +48,7 @@ app.use('/profile', profile)
 app.use('/groups', groups)
 app.use('/expenses', expenses)
 app.use('/dashboard', dashboard)
+app.use('/activities', activities)
 
 app.listen(3001);
 console.log("Server Listening on port 3001");

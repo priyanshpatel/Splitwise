@@ -28,7 +28,10 @@ router.post('/add',(req, res) => {
             return;
         }
         else{
-            const tran_amount = amount/result.length;
+            // const tran_amount = amount/result.length;
+            const tran_amount_self = amount - (amount/result.length);
+            const tran_amount_others = amount/result.length;
+            let tran_amount = amount;
             result_1 = result;
             con.query(addExpenseQuery, function(err, result, fields){
                 if(err){
@@ -50,9 +53,11 @@ router.post('/add',(req, res) => {
                                 if(element.USER_ID === userID){
                                     tran_type = 3;
                                     settled_flag = 'Y';
+                                    tran_amount = tran_amount_self;
                                 } else{
                                     tran_type = 6;
                                     settled_flag = 'N';
+                                    tran_amount = tran_amount_others;
                                 }
                                 const addTransactionQuery = "INSERT INTO `TRANSACTION` (GROUP_ID, PAID_BY_USER_ID, PAID_FOR_USER_ID, AMOUNT, TRAN_TYPE, EXP_ID, SETTLED_FLAG) VALUES ("+groupID+", "+userID+", "+element.USER_ID+", "+tran_amount+", "+tran_type+", "+exp_id+", '"+settled_flag+"')";
                                 con.query(addTransactionQuery, function(err, result, fields){
