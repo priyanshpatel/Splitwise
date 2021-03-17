@@ -60,7 +60,7 @@ class RecentActivity extends Component {
         this.setState({
             sort: e.target.value
         })
-        axios.get('http://localhost:3001/activities/recent_activity/' + cookie.load('userID') + '/' + this.state.groupSort + '/' + this.state.sort)
+        axios.get('http://localhost:3001/activities/recent_activity/' + cookie.load('userID') + '/' + this.state.groupSort + '/' + e.target.value)
             .then(response => {
                 if (response.status === 200) {
                     this.setState({
@@ -99,12 +99,11 @@ class RecentActivity extends Component {
             }, this);
 
         let activityData = <div>You don't owe anything</div>
-        if (this.state.activityData != null) {
+        if (this.state.activityData != null || this.state.activityData.length < 1) {
             activityData = this.state.activityData.map((activity) => {
                 return <div class="card text-dark bg-light" style={{ width: '81rem' }}>
                     <div class="card-body">
-                        {/* <h6 class="card-title"> <strong>{youOwe.USER_NAME} <span style={{ color: "#ed752f" }}>${youOwe.TOTAL_AMOUNT}</span></strong></h6> */}
-                        <h6 class="card-title">{activity.MESSAGE_1}</h6>
+                        <h6 class="card-title"><strong>{activity.MESSAGE_1}</strong></h6>
                         <p class="card-text">{activity.MESSAGE_2}</p>
                         <p class="card-text" style={{ color: "#8a8f94" }}><strong><Moment format="MMM DD">{activity.CREATED_AT}</Moment></strong></p>
                     </div>
@@ -133,8 +132,7 @@ class RecentActivity extends Component {
                         <div class="col-3" style={{ textAlign: "right" }}>
                             <div class="input-group mb-3">
                                 <select class="form-select" style={{ fontWeight: "bold" }} aria-label="user select" onChange={this.handleSort}>
-                                    <option selected>Sort</option>
-                                    <option value="1">Newest first</option>
+                                    <option selected value="1">Newest first</option>
                                     <option value="2">Oldest first</option>
                                 </select>
                             </div>
@@ -142,7 +140,7 @@ class RecentActivity extends Component {
                         <div class="col-3" style={{ textAlign: "right" }}>
                             <div class="input-group mb-3">
                                 <select class="form-select" style={{ fontWeight: "bold" }} aria-label="user select" onChange={this.handleGroupSort}>
-                                    <option selected>Filter by group</option>
+                                    <option selected value = "0">All groups</option>
                                     {dropDownGroups}
                                 </select>
                             </div>
@@ -152,6 +150,7 @@ class RecentActivity extends Component {
                     <div class="row">
                         <div class="col-12">
                             {activityData}
+                            {activityData.length < 1 ? <div class="alert alert-success" role="alert">No activities</div> : null}
                         </div>
                     </div>
                 </div>

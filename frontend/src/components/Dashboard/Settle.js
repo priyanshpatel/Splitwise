@@ -27,20 +27,45 @@ class Settle extends Component {
         })
     }
     handleSubmit = (e) => {
+        e.preventDefault();
         if (!this.state.MsgFlag) {
-            e.preventDefault();
-            window.location.reload()
+            const data = {
+                userID1: this.state.userID,
+                userID2: this.state.settleUserID
+            }
+            console.log(data);
+
+
+            axios.post('http://localhost:3001/activities/settleup', data)
+                .then(response => {
+                    console.log("=========Inside frontend===========");
+                    console.log("Status Code: ", response.status);
+                    console.log(response.data);
+                    if (response.status === 200) {
+                        window.location.reload()
+                    } else {
+                        console.log(response.data);
+                        this.setState({
+                            MsgFlag: true,
+                            Msg: "Settle up failed"
+                        })
+                    }
+                }).catch(err => {
+                    console.log(err);
+                })
+
+            // window.location.reload()
         }
     }
 
     render() {
         
-        if (this.state.youOweList.length ==0){
-            this.setState({
-                MsgFlag: true,
-                Msg: "You are all settled up"
-            })
-        }
+        // if (this.state.youOweList.length ==0){
+        //     this.setState({
+        //         MsgFlag: true,
+        //         Msg: "You are all settled up"
+        //     })
+        // }
 
         let dropDownFill = this.state.youOweList.length > 0
 		&& this.state.youOweList.map((item, i) => {

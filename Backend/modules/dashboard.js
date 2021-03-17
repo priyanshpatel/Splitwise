@@ -6,7 +6,8 @@ const con = require('./database');
 router.get('/total_balance/:userID', (req, res) => {
     const userID = req.params.userID
     console.log(userID);
-    const totalBalanceQuery = "SELECT IFNULL((SELECT IFNULL(SUM(T.AMOUNT),0) AS TOTAL_AMOUNT FROM `TRANSACTION` T WHERE T.PAID_BY_USER_ID = "+userID+" AND T.TRAN_TYPE = 6 AND T.SETTLED_FLAG = 'N') - (SELECT SUM(R.AMOUNT) AS TOTAL_AMOUNT FROM `TRANSACTION` R WHERE R.PAID_FOR_USER_ID = "+userID+" AND R.TRAN_TYPE = 6 AND R.SETTLED_FLAG = 'N'),0) AS TOTAL_BALANCE;"
+    //const totalBalanceQuery = "SELECT IFNULL((SELECT IFNULL(SUM(T.AMOUNT),0) AS TOTAL_AMOUNT FROM `TRANSACTION` T WHERE T.PAID_BY_USER_ID = "+userID+" AND T.TRAN_TYPE = 6 AND T.SETTLED_FLAG = 'N') - (SELECT SUM(R.AMOUNT) AS TOTAL_AMOUNT FROM `TRANSACTION` R WHERE R.PAID_FOR_USER_ID = "+userID+" AND R.TRAN_TYPE = 6 AND R.SETTLED_FLAG = 'N'),0) AS TOTAL_BALANCE;"
+    const totalBalanceQuery = "SELECT (SELECT IFNULL(SUM(T.AMOUNT),0) AS TOTAL_AMOUNT FROM `TRANSACTION` T WHERE T.PAID_BY_USER_ID = "+userID+" AND T.TRAN_TYPE = 6 AND T.SETTLED_FLAG = 'N') - (SELECT IFNULL(SUM(R.AMOUNT),0) AS TOTAL_AMOUNT FROM `TRANSACTION` R WHERE R.PAID_FOR_USER_ID = "+userID+" AND R.TRAN_TYPE = 6 AND R.SETTLED_FLAG = 'N') AS TOTAL_BALANCE;"
     con.query(totalBalanceQuery, function (err, result, fields) {
         if (err) {
             console.log(err);
