@@ -61,18 +61,13 @@ class AddExpense extends Component {
                 userID: this.state.userID,
                 currency: '$'
             }
-            console.log(data);
 
             axios.defaults.withCredentials = true;
-            axios.post(config.API_URL+'/expenses/add', data)
+            axios.post(config.API_URL + '/expenses/add', data)
                 .then(response => {
-                    console.log("=========Inside frontend===========");
-                    console.log("Status Code: ", response.status);
-                    console.log(response.data);
                     if (response.status === 200) {
                         window.location.reload()
                     } else {
-                        console.log(response.data);
                         this.setState({
                             MsgFlag: true,
                             Msg: "Add expense failed"
@@ -108,13 +103,7 @@ class AddExpense extends Component {
                         <div class="input-group mb-3">
                             <input type="text" name="description" class="form-control" id="description" placeholder="Enter a description" style={{ fontWeight: "bold" }} onChange={this.descriptionHandler} required></input>
                         </div>
-                        {/* <div class="mb-3" style={{float:"right"}}>
-                            <span class="left-inner-addon"><strong>$</strong></span>
-                            <input type="number" name="amount" step=".01" placeholder="0.00" min="0"></input>
-                        </div> */}
-                        {/* <div class="mb-3">
-                        <button class="btn btn-primary" style={{ backgroundColor: "#ed752f", border: "none" }}><strong>Save</strong></button>
-                        </div> */}
+
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">$</span>
@@ -122,7 +111,6 @@ class AddExpense extends Component {
                             <input type="number" class="form-control" name="amount" step=".01" placeholder="0.00" min="0.01" style={{ fontWeight: "bold" }} onChange={this.amountValidate} required />
                         </div>
                         <button type="submit" class="btn btn-primary" style={{ backgroundColor: "#59cfa7", border: "none" }} onClick={this.handleSubmit}><strong>Submit</strong></button>
-                        {/* {this.state.MsgFlag ? <div class="alert alert-danger" role="alert">{this.state.Msg}</div> : null} */}
                     </form>
                 </div><br />
                 {this.state.MsgFlag ? <div class="alert alert-danger" role="alert">{this.state.Msg}</div> : null}

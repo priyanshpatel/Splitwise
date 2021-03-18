@@ -28,8 +28,6 @@ router.post('/add', (req, res) => {
             return;
         }
         else {
-            // const tran_amount = amount/result.length;
-
             //Added due to debt table change
             let userID1 = null
             let userID2 = null
@@ -98,7 +96,6 @@ router.post('/add', (req, res) => {
                                                     console.log(err);
                                                     return;
                                                 } else {
-                                                    console.log(result[0].COUNT);
                                                     if (result[0].COUNT == 0) {
                                                         con.query(addDebtQuery, function (err, result, fields) {
                                                             if (err) {

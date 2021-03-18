@@ -9,8 +9,6 @@ import landing_plane from '../../images/landing_plane.png'
 class LandingPage extends Component {
     constructor(props) {
         super(props);
-        // this.loginClick = this.loginClick.bind(this);
-        // this.submitClick = this.submitClick.bind(this);
     }
 
     render() {
@@ -39,7 +37,6 @@ class LandingPage extends Component {
                                     <a class="btn btn-primary btn-lg" href="/signup" type="button" style={{ backgroundColor: "#59cfa7", border: "none" }}>Sign up</a>
                                 </div>
                                 <div class="col-7">
-                                    {/* <i class="fa fa-plane icon-style splitwise-color " style={{ fontSize: "100px"}}></i> */}
                                     <div><img class="landing-plane" src={landing_plane} style={{ paddingTop: "20px" }}></img></div>
                                 </div>
                             </div>

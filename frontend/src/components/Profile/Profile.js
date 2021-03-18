@@ -33,8 +33,6 @@ class Profile extends Component {
         this.setState({
             userID: parseInt(cookie.load('userID'))
         })
-        console.log("============component did mount===============");
-        console.log(cookie.load('userID'));
         axios.defaults.withCredentials = true;
         axios.get(config.API_URL + '/profile/' + cookie.load('userID'))
             .then(response => {
@@ -49,11 +47,8 @@ class Profile extends Component {
                         profilePicture: response.data.profilePicture,
                         image: config.API_URL + "/" + response.data.profilePicture
                     });
-                    console.log("===========inside 200==============");
-                    console.log(response.data);
                 }
             }).catch(e => {
-                console.log("inside catch");
                 console.log(e);
             })
     }
@@ -73,13 +68,6 @@ class Profile extends Component {
     }
 
     submitUpdate = (e) => {
-        console.log("===============submit update==============");
-        console.log(this.state.userName);
-        console.log(this.state.userEmail);
-        console.log(this.state.phoneNumber);
-        console.log(this.state.timezone);
-        console.log(this.state.currency);
-        console.log(this.state.language);
         e.preventDefault();
 
         let formData = new FormData();
@@ -108,7 +96,6 @@ class Profile extends Component {
         //     language: this.state.language,
         //     profilePicture: this.state.profilePicture
         // };
-        console.log("============update profile==============");
         // console.log(data);
 
         axios.defaults.withCredentials = true;

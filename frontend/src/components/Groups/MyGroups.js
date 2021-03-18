@@ -35,28 +35,20 @@ class MyGroups extends Component {
         })
     }
     componentDidMount() {
-        console.log("============component did mount===============");
-        console.log(cookie.load('userID'));
         axios.defaults.withCredentials = true;
-        axios.get(config.API_URL+'/groups/mygroupspending/' + cookie.load('userID'))
+        axios.get(config.API_URL + '/groups/mygroupspending/' + cookie.load('userID'))
             .then(response => {
                 if (response.status === 200) {
                     this.setState({
                         pendingInvites: response.data,
                         MsgFlag: false
                     });
-                    console.log("===========inside pending 200==============");
-                    console.log(response.data);
                 } else if (response.status === 201) {
-                    console.log("===========inside pending 201==============");
-                    console.log(response.data);
                     this.setState({
                         MsgFlag: true,
                         errorMessage: 'No pending invites'
                     });
                 } else {
-                    console.log("============else pending==============");
-                    console.log(response);
                     this.setState({
                         MsgFlag: true,
                         errorMessage: 'Error'
@@ -67,17 +59,13 @@ class MyGroups extends Component {
                 console.log(e);
             })
 
-        console.log("============component did mount===============");
-        console.log(cookie.load('userID'));
-        axios.get(config.API_URL+'/groups/mygroups/' + cookie.load('userID'))
+        axios.get(config.API_URL + '/groups/mygroups/' + cookie.load('userID'))
             .then(response => {
                 if (response.status === 200) {
                     this.setState({
                         //MsgFlag: false,
                         acceptedInvites: response.data
                     });
-                    console.log("===========inside mygroups 200==============");
-                    console.log(response.data);
                 } else if (response.status === 201) {
                     console.log("===========inside mygroups 201==============");
                     console.log(response.data);
@@ -106,10 +94,9 @@ class MyGroups extends Component {
             flag: 'R'
         }
         axios.defaults.withCredentials = true;
-        axios.post(config.API_URL+'/groups/acceptrejectinvite', data)
+        axios.post(config.API_URL + '/groups/acceptrejectinvite', data)
             .then(response => {
                 if (response.state === 200) {
-                    console.log(response);
                     this.setState({
                         rejectFlag: response.data
                     })
@@ -135,11 +122,11 @@ class MyGroups extends Component {
             flag: 'L'
         }
         axios.defaults.withCredentials = true;
-        axios.post(config.API_URL+'/groups/leave', data)
+        axios.post(config.API_URL + '/groups/leave', data)
             .then(response => {
                 if (response.state === 200) {
                     console.log("Group left successfully");
-                } else if(response.state === 201){
+                } else if (response.state === 201) {
                     this.setState({
                         leaveFlag: true,
                         errorMessage: response.data
@@ -167,10 +154,9 @@ class MyGroups extends Component {
             flag: 'A'
         }
         axios.defaults.withCredentials = true;
-        axios.post(config.API_URL+'/groups/acceptrejectinvite', data)
+        axios.post(config.API_URL + '/groups/acceptrejectinvite', data)
             .then(response => {
                 if (response.state === 200) {
-                    console.log(response);
                     this.setState({
                         acceptFlag: response.data
                     })
@@ -179,19 +165,12 @@ class MyGroups extends Component {
                 console.log(e);
             })
 
-        console.log("--------state change accept---------");
-        console.log('accepted' + group.GROUP_NAME);
-        console.log(this.state.pendingInvites);
         const newPendingInvites = this.state.pendingInvites.filter((invite) => {
-            console.log("group: " + group.GROUP_ID + " invite.groupid: " + invite.GROUP_ID);
             // return group != invite.GROUP_ID
             // return invite.GROUP_ID != group.GROUP_ID
             return group.GROUP_ID != invite.GROUP_ID
         });
-        console.log("NEWPENDINGINVITES");
-        console.log(newPendingInvites);
-        console.log("ACCEPTEDINVITES");
-        console.log(this.state.acceptedInvites);
+
         const emptyInvitesFlag = newPendingInvites.length == 0 ? true : false;
         this.setState({
             pendingInvites: newPendingInvites,
@@ -199,9 +178,6 @@ class MyGroups extends Component {
             emptyInvitesFlag,
             pendingInvites: newPendingInvites
         })
-        console.log("NEWACCEPTEDINVITES");
-        console.log(group);
-        console.log(this.state.acceptedInvites);
     }
 
     render() {
@@ -214,7 +190,7 @@ class MyGroups extends Component {
         let acceptedInvites = <div>No groups to show</div>;
 
         let searchedGroups = this.state.acceptedInvites.filter((group) => {
-            if(group.GROUP_NAME!=null && this.state.searchInput != null){
+            if (group.GROUP_NAME != null && this.state.searchInput != null) {
                 return group.GROUP_NAME.toLowerCase().includes(this.state.searchInput.toLowerCase());
             } else {
                 return true
@@ -242,7 +218,7 @@ class MyGroups extends Component {
             })
         }
 
-        if (this.state.searchInput != null){
+        if (this.state.searchInput != null) {
             acceptedInvites = searchedGroups.map((invite) => {
                 return <AcceptedGroups
                     key={invite.GROUP_ID}
@@ -261,7 +237,7 @@ class MyGroups extends Component {
                     <br />
                     <div class="container">
                         <h3><strong>My groups</strong></h3>
-                        <hr/>
+                        <hr />
                         <div class="row">
                             <div class="col-3">
                                 <h4 style={{ color: "#8a8f94" }}><strong>Pending Invites</strong></h4>
@@ -291,7 +267,7 @@ class MyGroups extends Component {
                                     <p></p>
                                     <div class="input-group rounded">
                                         <input type="search" name="searchInput" onChange={this.groupSearch} class="form-control rounded" placeholder="Search" aria-label="Search"
-                                            aria-describedby="search-addon" style={{ fontWeight: "bold" }}/>
+                                            aria-describedby="search-addon" style={{ fontWeight: "bold" }} />
                                         <span class="input-group-text border-0" id="search-addon">
                                             <i class="fa fa-search"></i>
                                         </span>

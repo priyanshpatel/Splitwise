@@ -1,9 +1,5 @@
 import React, {Component} from 'react';
 import {Route} from 'react-router-dom';
-// import Login from './Login/Login';
-// import Home from './Home/Home';
-// import Delete from './Delete/Delete';
-// import Create from './Create/Create';
 import Navbar from './LandingPage/Navbar';
 import LandingPage from './LandingPage/LandingPage';
 import Login from './Login/Login';
@@ -29,11 +25,6 @@ class Main extends Component {
                 {<Route path="/mygroups" component={MyGroups} />}
                 {<Route exact path="/grouppage/:groupid" component={GroupPage}/>}
                 {<Route path="/recentactivity" component={RecentActivity} />}
-                {/* {<Route path="/mygroups/:GROUP_ID" component={MyGroups} />} */}
-                {/* {<Route path="/grouppage" component={GroupPage}/>} */}
-                {/* // <Route path="/home" component={Home}/>
-                // <Route path="/delete" component={Delete}/>
-                // <Route path="/create" component={Create}/> */}
             </div>
         )
     }

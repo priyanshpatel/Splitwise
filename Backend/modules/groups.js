@@ -12,12 +12,11 @@ const storage = multer.diskStorage({
         cb(null, "./public/uploads/group/");
     },
     filename: function (req, file, cb) {
-        // console.log(req);
         cb(
             null,
             file.fieldname +
             "_" +
-            Math.floor(Math.random()*100) +
+            Math.floor(Math.random() * 100) +
             "_" +
             Date.now() +
             path.extname(file.originalname)
@@ -29,31 +28,26 @@ const storage = multer.diskStorage({
 const uploadGroupImage = multer({
     storage,
     limits: {
-      fileSize: 1024 * 1024 * 5,
+        fileSize: 1024 * 1024 * 5,
     },
-  });
+});
 
 // router.post('/create', (req, res) => {
-    router.post('/create', uploadGroupImage.single("groupPicture"), (req, res) => {
-    console.log(req.body.groupMembers[0].value)
+router.post('/create', uploadGroupImage.single("groupPicture"), (req, res) => {
     const userID = req.body.userID
     const groupName = req.body.groupName
     // const groupPicture = req.body.groupPicture
     const groupMembers = req.body.groupMembers
-    console.log("{}{}{}{}{}{}Group Members{}{}{}{}{}");
-    console.log(groupMembers);
     const ts = new Date().toISOString().slice(0, 19).replace('T', ' ');
     const groupCount = 0;
     let groupID = null;
 
     let imagePath = null;
     if (req.file) {
-        // console.log(req.file);
-      imagePath = req.file.path.substring(req.file.path.indexOf("/") + 1);
+        imagePath = req.file.path.substring(req.file.path.indexOf("/") + 1);
     }
 
     const groupCountQuery = "SELECT COUNT(0) AS COUNT FROM EXPENSE_GROUPS WHERE GROUP_NAME = '" + groupName + "'";
-    console.log(groupCountQuery);
     con.query(groupCountQuery, function (err, result, fields) {
         if (err) {
             console.log("Group count error");
@@ -96,7 +90,6 @@ const uploadGroupImage = multer({
                         for (let i = 0; i < groupMembersList.length; i++) {
                             //const memUserID = req.body.groupMembers[i].value;
                             const memUserID = groupMembersList[i]
-                            console.log(memUserID);
                             const memAddQuery = "INSERT INTO USER_GROUP_MAP(USER_ID, GROUP_ID, ADDED_BY, ADDED_DATE, INVITE_FLAG) SELECT " + memUserID + ", EXPENSE_GROUPS.GROUP_ID, " + userID + ", '" + ts + "', 'P' FROM EXPENSE_GROUPS WHERE EXPENSE_GROUPS.GROUP_NAME = '" + groupName + "'";
                             console.log(memAddQuery);
                             con.query(memAddQuery, function (err, result, fields) {
@@ -123,7 +116,6 @@ router.get('/mygroups/:userID', (req, res) => {
     //const userID = req.body.userID
     const userID = req.params.userID
     const groupCountQuery = "SELECT COUNT(0) AS COUNT FROM USER_GROUP_MAP WHERE INVITE_FLAG = 'A' AND USER_ID = " + userID
-    console.log(groupCountQuery);
 
     con.query(groupCountQuery, function (err, result, fields) {
         if (err) {
@@ -136,14 +128,12 @@ router.get('/mygroups/:userID', (req, res) => {
             return;
         } else {
             const getGroupsQuery = "SELECT E.GROUP_NAME, E.GROUP_ID, U.INVITE_FLAG FROM EXPENSE_GROUPS E, USER_GROUP_MAP U WHERE E.GROUP_ID = U.GROUP_ID AND U.INVITE_FLAG = 'A' AND U.USER_ID = " + userID
-            console.log(getGroupsQuery);
             con.query(getGroupsQuery, function (err, result, fields) {
                 if (err) {
                     console.log("error getting groups");
                     res.status(500).send("error getting groups");
                     return;
                 } else {
-                    console.log(result);
                     res.status(200).send(result);
                 }
             });
@@ -157,7 +147,6 @@ router.get('/mygroupspending/:userID', (req, res) => {
     const userID = req.params.userID
     const groupCountQuery = "SELECT COUNT(0) AS COUNT FROM USER_GROUP_MAP WHERE INVITE_FLAG = 'P' AND USER_ID = " + userID
     //const groupCountQuery = "SELECT COUNT(0) AS COUNT FROM USER_GROUP_MAP WHERE USER_ID = " + userID
-    console.log(groupCountQuery);
 
     con.query(groupCountQuery, function (err, result, fields) {
         if (err) {
@@ -170,14 +159,12 @@ router.get('/mygroupspending/:userID', (req, res) => {
             return;
         } else {
             const getGroupsQuery = "SELECT E.GROUP_NAME, E.GROUP_ID, U.INVITE_FLAG FROM EXPENSE_GROUPS E, USER_GROUP_MAP U WHERE E.GROUP_ID = U.GROUP_ID AND U.INVITE_FLAG = 'P' AND U.USER_ID = " + userID
-            console.log(getGroupsQuery);
             con.query(getGroupsQuery, function (err, result, fields) {
                 if (err) {
                     console.log("error getting groups");
                     res.status(500).send("error getting groups");
                     return;
                 } else {
-                    console.log(result);
                     res.status(200).send(result);
                 }
             });
@@ -192,7 +179,6 @@ router.post('/acceptrejectinvite', (req, res) => {
     const flag = req.body.flag;
 
     const acceptRejectQuery = "UPDATE USER_GROUP_MAP U SET U.INVITE_FLAG = '" + flag + "' WHERE U.GROUP_ID = " + groupID + " AND U.USER_ID = " + userID
-    console.log(acceptRejectQuery);
 
     con.query(acceptRejectQuery, function (err, result, fields) {
         if (err) {
@@ -200,7 +186,6 @@ router.post('/acceptrejectinvite', (req, res) => {
             res.status(500).send("Error updating Invite");
             return;
         } else {
-            console.log(result.affectedRows);
             const queryResult = result.affectedRows;
             res.status(200).json({ "rowsAffected": queryResult });
         }
@@ -238,7 +223,6 @@ router.get('/groupdetails/:groupID', (req, res) => {
             res.status(500).send("Error while getting group details");
             return;
         } else {
-            console.log(result);
             res.status(200).send(result);
         }
     });
@@ -252,7 +236,7 @@ router.post('/update', uploadGroupImage.single("groupPicture"), (req, res) => {
     let imagePath = null;
     if (req.file) {
         // console.log(req.file);
-      imagePath = req.file.path.substring(req.file.path.indexOf("/") + 1);
+        imagePath = req.file.path.substring(req.file.path.indexOf("/") + 1);
     }
 
     const updateGroupDetails = "UPDATE EXPENSE_GROUPS SET GROUP_NAME = '" + groupName + "', GROUP_PICTURE = '" + imagePath + "' WHERE GROUP_ID = " + groupID
@@ -267,7 +251,6 @@ router.post('/update', uploadGroupImage.single("groupPicture"), (req, res) => {
                 res.status(500).send(err);
             }
         } else {
-            console.log(result);
             res.status(200).send(result);
         }
     });
@@ -282,8 +265,6 @@ router.get('/search/users', (req, res) => {
         if (err) {
             res.status(500).send('Error');
         } else {
-            console.log("=========Search User Backend=========");
-            console.log(users);
             res.status(200).json({
                 // 'userID': result[0].USER_ID,
                 // 'userEmail': result[0].USER_EMAIL,
@@ -303,8 +284,6 @@ router.get('/search/groups/:userID', (req, res) => {
         if (err) {
             res.status(500).send(err);
         } else {
-            console.log("=========Search Group Backend=========");
-            console.log(groups);
             res.status(200).json({
                 groups
             });
@@ -359,7 +338,6 @@ router.post('/leave', (req, res) => {
                         //res.status(500).send("Error while leaving group");
                         return;
                     } else {
-                        console.log(result);
                         res.status(200).send("Left group successfully");
                     }
                 });

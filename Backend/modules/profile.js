@@ -7,18 +7,16 @@ const multer = require('multer');
 const path = require('path');
 
 // set storage
-console.log('Current directory: ' + process.cwd());
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, "./public/uploads/profile/");
     },
     filename: function (req, file, cb) {
-        // console.log(req);
         cb(
             null,
             file.fieldname +
             "_" +
-            Math.floor(Math.random()*100) +
+            Math.floor(Math.random() * 100) +
             "_" +
             Date.now() +
             path.extname(file.originalname)
@@ -30,15 +28,14 @@ const storage = multer.diskStorage({
 const uploadGroupImage = multer({
     storage,
     limits: {
-      fileSize: 1024 * 1024 * 5,
+        fileSize: 1024 * 1024 * 5,
     },
-  });
+});
 
 router.get('/:userID', (req, res) => {
     //const userID = req.body.userID;
     const userID = req.params.userID
     const profileViewQuery = "SELECT * FROM USERS WHERE USER_ID = " + userID;
-    // console.log(profileViewQuery);
     con.query(profileViewQuery, function (err, result, fields) {
         if (err) {
             res.status(500).send('Error');
@@ -68,16 +65,14 @@ router.post('/update', uploadGroupImage.single("profilePicture"), (req, res) => 
     const timezone = req.body.timezone;
     const language = req.body.language;
     //const profilePicture = req.body.profilePicture;
-    
+
     let imagePath = null;
     if (req.file) {
-        // console.log(req.file);
-      imagePath = req.file.path.substring(req.file.path.indexOf("/") + 1);
+        imagePath = req.file.path.substring(req.file.path.indexOf("/") + 1);
     }
     console.log("Inside update profile post");
 
     const updateProfileQuery = 'UPDATE USERS SET USER_NAME = "' + userName + '", USER_EMAIL = "' + userEmail + '", PHONE_NUMBER = ' + phoneNumber + ', CURRENCY = "' + currency + '", TIMEZONE = "' + timezone + '", LANGUAGE = "' + language + '", PROFILE_PICTURE = "' + imagePath + '" WHERE USER_ID = ' + userID;
-    // console.log(updateProfileQuery);
 
     con.query(updateProfileQuery, function (err, result, fields) {
         if (err) {

@@ -39,7 +39,6 @@ class RecentActivity extends Component {
                     console.log(response.data);
                 }
             }).catch(e => {
-                console.log("inside catch");
                 console.log(e);
             })
 
@@ -57,7 +56,6 @@ class RecentActivity extends Component {
 
     handleSort = (e) => {
         e.preventDefault()
-        console.log(e.target.value);
         this.setState({
             sort: e.target.value
         })
@@ -75,7 +73,6 @@ class RecentActivity extends Component {
 
     handleGroupSort = (e) => {
         e.preventDefault()
-        console.log(e.target.value);
         this.setState({
             groupSort: e.target.value
         })

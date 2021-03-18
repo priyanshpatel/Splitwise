@@ -45,14 +45,10 @@ class Login extends Component {
         }
         axios.defaults.withCredentials = true;
         // axios.post('http://localhost:3001/login', data)
-        axios.post(config.API_URL+'/login', data)
+        axios.post(config.API_URL + '/login', data)
             .then(response => {
-                console.log("=========Inside frontend===========");
-                console.log("Status Code: ", response.status);
-                console.log(response.data);
                 if (response.status === 200) {
                     //redirect to dashboard
-                    console.log(response.data);
                     this.setState({
                         authFlag: false,
                         MsgFlag: false,
@@ -70,7 +66,6 @@ class Login extends Component {
                     this.props.history.push("/dashboard")
                 } else if (response.status === 201) {
                     //Invalid credentials
-                    console.log(response.data);
                     this.setState({
                         authFlag: true,
                         MsgFlag: true,
@@ -78,7 +73,6 @@ class Login extends Component {
                     })
                 } else {
                     //login failed
-                    console.log(response.data);
                     this.setState({
                         authFlag: true,
                         MsgFlag: true,
@@ -86,7 +80,7 @@ class Login extends Component {
                     })
                 }
             }).catch(e => {
-                console.log("Inside catch");
+                console.log(e);
             })
     }
     render() {

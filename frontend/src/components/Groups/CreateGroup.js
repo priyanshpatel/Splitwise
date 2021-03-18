@@ -42,8 +42,6 @@ class CreateGroup extends Component {
                             value: user.USER_ID,
                         };
                     });
-                    console.log("==============INSIDE SEARCH==============");
-                    console.log(searchedUsers);
                     callback(searchedUsers)
                 }
             }).catch(e => {
@@ -103,11 +101,7 @@ class CreateGroup extends Component {
             // };
             // console.log("============Group Save==============");
             // console.log(data);
-            console.log("[][][][][][][][][][][][][][][Form data[]][][][][][][][][")
-            console.log(formData.userID)
-            console.log(this.state.groupName)
-            console.log(this.state.groupMembers)
-            console.log(formData);
+            
             axios.defaults.withCredentials = true;
             axios.post(config.API_URL + '/groups/create', formData, {
                 headers: Object.assign(
@@ -148,14 +142,12 @@ class CreateGroup extends Component {
     }
 
     usersChangeHandler = (e) => {
-        console.log("usersChangeHandler");
         this.setState({
             groupMembers: e
         })
     }
 
     render() {
-        console.log(this.state)
         let redirectVar = null;
         if (!cookie.load('userID')) {
             redirectVar = <Redirect to="/" />

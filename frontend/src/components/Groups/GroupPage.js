@@ -7,7 +7,6 @@ import axios from 'axios';
 import AsyncSelect from "react-select/async";
 import PropTypes from 'prop-types';
 import Moment from 'react-moment'
-// import { Modal } from 'semantic-ui-react';
 import Modal from 'react-modal';
 import AddExpense from "./AddExpense"
 import config from "../../config.json";
@@ -16,29 +15,29 @@ import EditGroup from "./EditGroup"
 
 const customStyles = {
     content: {
-      top: "40%",
-      left: "50%",
-      right: "auto",
-      bottom: "auto",
-      marginRight: "-50%",
-      height: "400px",
-      width: "500px",
-      transform: "translate(-50%, -50%)",
+        top: "40%",
+        left: "50%",
+        right: "auto",
+        bottom: "auto",
+        marginRight: "-50%",
+        height: "400px",
+        width: "500px",
+        transform: "translate(-50%, -50%)",
     },
-  };
+};
 
-  const customStyles_2 = {
+const customStyles_2 = {
     content: {
-      top: "40%",
-      left: "50%",
-      right: "auto",
-      bottom: "auto",
-      marginRight: "-50%",
-      height: "500px",
-      width: "500px",
-      transform: "translate(-50%, -50%)",
+        top: "40%",
+        left: "50%",
+        right: "auto",
+        bottom: "auto",
+        marginRight: "-50%",
+        height: "500px",
+        width: "500px",
+        transform: "translate(-50%, -50%)",
     },
-  };
+};
 
 class GroupPage extends Component {
     constructor(props) {
@@ -57,17 +56,14 @@ class GroupPage extends Component {
     }
 
     componentDidMount() {
-        console.log("----------inside grouppage component-------------");
         const groupID = this.props.match.params.groupid
-        console.log("========handle=========");
-        console.log(groupID);
         this.setState({
             GROUP_ID: this.props.match.params.groupid,
             userID: parseInt(cookie.load('userID'))
         })
 
         axios.defaults.withCredentials = true;
-        axios.get(config.API_URL+'/groups/groupdetails/' + this.props.match.params.groupid)
+        axios.get(config.API_URL + '/groups/groupdetails/' + this.props.match.params.groupid)
             .then(response => {
                 if (response.status === 200) {
                     this.setState({
@@ -81,10 +77,9 @@ class GroupPage extends Component {
                 console.log(e);
             })
 
-        axios.get(config.API_URL+'/groups/groupexpenses/' + this.props.match.params.groupid)
+        axios.get(config.API_URL + '/groups/groupexpenses/' + this.props.match.params.groupid)
             .then(response => {
                 if (response.status === 200) {
-                    console.log(response.data);
                     this.setState({
                         groupExpenses: response.data
                     });
@@ -94,10 +89,9 @@ class GroupPage extends Component {
                 console.log(e);
             })
 
-        axios.get(config.API_URL+'/groups/groupbalances/' + this.props.match.params.groupid)
+        axios.get(config.API_URL + '/groups/groupbalances/' + this.props.match.params.groupid)
             .then(response => {
                 if (response.status === 200) {
-                    console.log(response.data);
                     this.setState({
                         groupBalances: response.data
                     });
@@ -109,16 +103,12 @@ class GroupPage extends Component {
     }
 
     toggleAddExpense = () => {
-        console.log("ADD EXPENSE");
-        console.log(this.state.addExpensePopUp);
         this.setState({
             addExpensePopUp: !this.state.addExpensePopUp
         })
     }
 
     toggleEditGroup = () => {
-        console.log("ADD EXPENSE");
-        console.log(this.state.editGroupPopUp);
         this.setState({
             editGroupPopUp: !this.state.editGroupPopUp
         })
@@ -134,14 +124,6 @@ class GroupPage extends Component {
         let groupExpenses = <div>No expenses</div>;
         if (this.state.groupExpenses != null) {
             groupExpenses = this.state.groupExpenses.map((expense) => {
-                // return <div class="p-3 border bg-light">{invite}</div>;
-                // return <PendingGroups
-                //     key={invite.GROUP_ID}
-                //     data={invite}
-                //     acceptInvite={this.acceptInvite}
-                //     rejectInvite={this.rejectInvite}
-                // />
-
                 return <div class="card text-dark bg-light" style={{ width: '38rem' }}>
                     <div class="card-body">
                         <div class="row">
@@ -151,23 +133,20 @@ class GroupPage extends Component {
                                         <h6 class="card-title" style={{ paddingLeft: "15px", paddingTop: "15px", color: "#8a8f94" }}><strong><Moment format="MMM DD">{expense.CREATED_AT}</Moment></strong></h6>
                                     </div>
                                     <div class="col-9">
-                                        {expense.SETTLE_FLAG == 'Y' && expense.PAID_BY_USER_ID == this.state.userID ? <h6 class="card-title" style={{ paddingTop: "18px" }}><strong>You and {expense.SETTLED_WITH_USER_NAME} settled up</strong></h6>: null}
-                                        {expense.SETTLE_FLAG == 'Y' && expense.SETTLED_WITH_USER_ID == this.state.userID ? <h6 class="card-title" style={{ paddingTop: "18px" }}><strong>You and {expense.USER_NAME} settled up</strong></h6>: null}
-                                        {expense.SETTLE_FLAG == 'Y' && expense.SETTLED_WITH_USER_ID != this.state.userID && expense.PAID_BY_USER_ID != this.state.userID ? <h6 class="card-title" style={{ paddingTop: "18px" }}><strong>{expense.USER_NAME} and {expense.SETTLED_WITH_USER_NAME} settled up</strong></h6>: null}
-                                        {expense.SETTLE_FLAG == 'N' ? <h6 class="card-title" style={{ paddingTop: "18px" }}><strong>{expense.DESCRIPTION}</strong></h6>: null}
-                                        {/* <h6 class="card-title" style={{ paddingTop: "18px" }}><strong>{expense.DESCRIPTION}</strong></h6> */}
+                                        {expense.SETTLE_FLAG == 'Y' && expense.PAID_BY_USER_ID == this.state.userID ? <h6 class="card-title" style={{ paddingTop: "18px" }}><strong>You and {expense.SETTLED_WITH_USER_NAME} settled up</strong></h6> : null}
+                                        {expense.SETTLE_FLAG == 'Y' && expense.SETTLED_WITH_USER_ID == this.state.userID ? <h6 class="card-title" style={{ paddingTop: "18px" }}><strong>You and {expense.USER_NAME} settled up</strong></h6> : null}
+                                        {expense.SETTLE_FLAG == 'Y' && expense.SETTLED_WITH_USER_ID != this.state.userID && expense.PAID_BY_USER_ID != this.state.userID ? <h6 class="card-title" style={{ paddingTop: "18px" }}><strong>{expense.USER_NAME} and {expense.SETTLED_WITH_USER_NAME} settled up</strong></h6> : null}
+                                        {expense.SETTLE_FLAG == 'N' ? <h6 class="card-title" style={{ paddingTop: "18px" }}><strong>{expense.DESCRIPTION}</strong></h6> : null}
                                     </div>
                                 </div>
                             </div>
                             <div class="col-5">
                                 <div class="row">
-                                    {/* {expense.SETTLE_FLAG == 'N' ? <h6 class="card-title" style={{ textAlign: "right", color: "#8a8f94" }}><strong>{expense.PAID_BY_USER_ID == this.state.userID ? "You Paid": null}</strong></h6> : null } */}
-                                    {/* <h6 class="card-title" style={{ textAlign: "right", color: "#8a8f94" }}><strong>{expense.USER_NAME + " Paid"}</strong></h6> */}
-                                    {expense.SETTLE_FLAG == 'N' && expense.PAID_BY_USER_ID != this.state.userID ? <h6 class="card-title" style={{ textAlign: "right", color: "#8a8f94" }}><strong>{expense.USER_NAME + " Paid"}</strong></h6>: null}
-                                    {expense.SETTLE_FLAG == 'N' && expense.PAID_BY_USER_ID == this.state.userID ? <h6 class="card-title" style={{ textAlign: "right", color: "#8a8f94" }}><strong>{"You Paid"}</strong></h6>: null}
+                                    {expense.SETTLE_FLAG == 'N' && expense.PAID_BY_USER_ID != this.state.userID ? <h6 class="card-title" style={{ textAlign: "right", color: "#8a8f94" }}><strong>{expense.USER_NAME + " Paid"}</strong></h6> : null}
+                                    {expense.SETTLE_FLAG == 'N' && expense.PAID_BY_USER_ID == this.state.userID ? <h6 class="card-title" style={{ textAlign: "right", color: "#8a8f94" }}><strong>{"You Paid"}</strong></h6> : null}
                                 </div>
                                 <div class="row">
-                                {expense.SETTLE_FLAG == 'N' ? <h6 class="card-title" style={{ textAlign: "right" }}><strong>{expense.CURRENCY + expense.AMOUNT}</strong></h6> : null }
+                                    {expense.SETTLE_FLAG == 'N' ? <h6 class="card-title" style={{ textAlign: "right" }}><strong>{expense.CURRENCY + expense.AMOUNT}</strong></h6> : null}
                                 </div>
                             </div>
                         </div>
@@ -181,12 +160,11 @@ class GroupPage extends Component {
             groupBalances = this.state.groupBalances.map((expense) => {
                 return <div class="card text-dark" style={{ width: '15rem' }}>
                     <div class="card-body">
-                        {expense.USER_ID != this.state.userID? <h6 class="card-title"><strong>{expense.USER_NAME}</strong></h6>: <h6 class="card-title"><strong>{"Your balance:"}</strong></h6>}
+                        {expense.USER_ID != this.state.userID ? <h6 class="card-title"><strong>{expense.USER_NAME}</strong></h6> : <h6 class="card-title"><strong>{"Your balance:"}</strong></h6>}
                         <h6 class="card-title"><strong>{expense.CURRENCY}</strong></h6>
-                        {/* {expense.OWE_AMOUNT < 0 ? <h6 class="card-title" style={{ color: "#ed752f"}}><strong>{"Owes $" + Math.abs(expense.OWE_AMOUNT)}</strong></h6>: <h6 class="card-title" style={{ color: "#59cfa7" }}><strong>{"Gets back $" + expense.OWE_AMOUNT}</strong></h6>} */}
-                        {expense.OWE_AMOUNT < 0 ? <h6 class="card-title" style={{ color: "#ed752f"}}><strong>{"Owes $" + Math.abs(expense.OWE_AMOUNT)}</strong></h6>: null}
-                        {expense.OWE_AMOUNT > 0 ? <h6 class="card-title" style={{ color: "#59cfa7" }}><strong>{"Gets back $" + expense.OWE_AMOUNT}</strong></h6>: null}
-                        {expense.OWE_AMOUNT == 0 ? <h6 class="card-title" style={{ color: "#59cfa7"}}><strong>{"Balances settled up"}</strong></h6>: null}
+                        {expense.OWE_AMOUNT < 0 ? <h6 class="card-title" style={{ color: "#ed752f" }}><strong>{"Owes $" + Math.abs(expense.OWE_AMOUNT)}</strong></h6> : null}
+                        {expense.OWE_AMOUNT > 0 ? <h6 class="card-title" style={{ color: "#59cfa7" }}><strong>{"Gets back $" + expense.OWE_AMOUNT}</strong></h6> : null}
+                        {expense.OWE_AMOUNT == 0 ? <h6 class="card-title" style={{ color: "#59cfa7" }}><strong>{"Balances settled up"}</strong></h6> : null}
                     </div>
                 </div>
             })
@@ -224,19 +202,19 @@ class GroupPage extends Component {
                             <br></br>
                         </div>
                         <div class="col-3">
-                            
+
                         </div>
                         <div class="col-3">
-                            <h6 style={{color: "#8a8f94"}}><strong>GROUP BALANCES</strong></h6>
-                        {groupBalances}
+                            <h6 style={{ color: "#8a8f94" }}><strong>GROUP BALANCES</strong></h6>
+                            {groupBalances}
                         </div>
                         <hr></hr>
                     </div>
                     <Modal style={customStyles} isOpen={this.state.addExpensePopUp} ariaHideApp={false}>
-                        <AddExpense data = {this.state} closePopUp={this.toggleAddExpense} />
+                        <AddExpense data={this.state} closePopUp={this.toggleAddExpense} />
                     </Modal>
                     <Modal style={customStyles_2} isOpen={this.state.editGroupPopUp} ariaHideApp={false}>
-                        <EditGroup data = {this.state} closePopUp={this.toggleEditGroup} />
+                        <EditGroup data={this.state} closePopUp={this.toggleEditGroup} />
                     </Modal>
                 </div>
             </div>

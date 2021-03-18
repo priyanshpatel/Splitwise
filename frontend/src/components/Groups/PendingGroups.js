@@ -10,16 +10,6 @@ class PendingGroups extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            // group: {
-            //     groupID: this.props.data.GROUP_ID,
-            //     groupName: this.props.data.GROUP_NAME,
-            //     inviteFlag: this.props.data.INVITE_FLAG
-            // }
-
-            // groupID: this.props.data.GROUP_ID,
-            // groupName: this.props.data.GROUP_NAME,
-            // inviteFlag: this.props.data.INVITE_FLAG
-
             GROUP_NAME: this.props.data.GROUP_NAME,
             GROUP_ID: this.props.data.GROUP_ID,
             INVITE_FLAG: this.props.data.INVITE_FLAG
@@ -27,7 +17,7 @@ class PendingGroups extends Component {
     }
 
     componentDidMount() {
-        console.log("----------inside pending component-------------");
+        console.log("----------inside pending-------------");
         console.log(this.state.groupID);
         console.log(this.state.groupName);
         console.log(this.state.inviteFlag);
