@@ -79,11 +79,11 @@ class Navbar extends Component {
                                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                         <li><a class="dropdown-item" href="/">Dashboard</a></li>
                                         <li><a class="dropdown-item" href="/recentactivity">Recent activity</a></li>
-                                        <li><a class="dropdown-item" href="/profile">Your account</a></li>
+                                        <li><hr class="dropdown-divider" /></li>
                                         <li><a class="dropdown-item" href="/mygroups">My groups</a></li>
                                         <li><a class="dropdown-item" href="/creategroup">Create a group</a></li>
                                         <li><hr class="dropdown-divider" /></li>
-                                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                        <li><a class="dropdown-item" href="/profile">Your account</a></li>
                                     </ul>
                                 </li>
 
