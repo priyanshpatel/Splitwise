@@ -50,8 +50,9 @@ class AddExpense extends Component {
     }
 
     handleSubmit = (e) => {
+        e.preventDefault();
         if (!this.state.MsgFlag) {
-            e.preventDefault();
+            // e.preventDefault();
             const data = {
                 description: this.state.description,
                 amount: this.state.amount,
@@ -61,7 +62,7 @@ class AddExpense extends Component {
             }
             console.log(data);
 
-
+            axios.defaults.withCredentials = true;
             axios.post('http://localhost:3001/expenses/add', data)
                 .then(response => {
                     console.log("=========Inside frontend===========");

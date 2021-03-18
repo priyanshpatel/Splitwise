@@ -122,23 +122,24 @@ class GroupPage extends Component {
                                     <div class="col-3">
                                         <h6 class="card-title" style={{ paddingLeft: "15px", paddingTop: "15px", color: "#8a8f94" }}><strong><Moment format="MMM DD">{expense.CREATED_AT}</Moment></strong></h6>
                                     </div>
-                                    <div class="col-7">
-                                        <h6 class="card-title" style={{ paddingTop: "18px" }}><strong>{expense.DESCRIPTION}</strong></h6>
+                                    <div class="col-9">
+                                        {expense.SETTLE_FLAG == 'Y' && expense.PAID_BY_USER_ID == this.state.userID ? <h6 class="card-title" style={{ paddingTop: "18px" }}><strong>You and {expense.SETTLED_WITH_USER_NAME} settled up</strong></h6>: null}
+                                        {expense.SETTLE_FLAG == 'Y' && expense.SETTLED_WITH_USER_ID == this.state.userID ? <h6 class="card-title" style={{ paddingTop: "18px" }}><strong>You and {expense.USER_NAME} settled up</strong></h6>: null}
+                                        {expense.SETTLE_FLAG == 'Y' && expense.SETTLED_WITH_USER_ID != this.state.userID && expense.PAID_BY_USER_ID != this.state.userID ? <h6 class="card-title" style={{ paddingTop: "18px" }}><strong>{expense.USER_NAME} and {expense.SETTLED_WITH_USER_NAME} settled up</strong></h6>: null}
+                                        {expense.SETTLE_FLAG == 'N' ? <h6 class="card-title" style={{ paddingTop: "18px" }}><strong>{expense.DESCRIPTION}</strong></h6>: null}
+                                        {/* <h6 class="card-title" style={{ paddingTop: "18px" }}><strong>{expense.DESCRIPTION}</strong></h6> */}
                                     </div>
                                 </div>
                             </div>
-                            {/* <div class="col-1">
-
-                            </div>
-                            <div class="col-1">
-
-                            </div> */}
                             <div class="col-5">
                                 <div class="row">
-                                    <h6 class="card-title" style={{ textAlign: "right", color: "#8a8f94" }}><strong>{expense.USER_NAME + " Paid"}</strong></h6>
+                                    {/* {expense.SETTLE_FLAG == 'N' ? <h6 class="card-title" style={{ textAlign: "right", color: "#8a8f94" }}><strong>{expense.PAID_BY_USER_ID == this.state.userID ? "You Paid": null}</strong></h6> : null } */}
+                                    {/* <h6 class="card-title" style={{ textAlign: "right", color: "#8a8f94" }}><strong>{expense.USER_NAME + " Paid"}</strong></h6> */}
+                                    {expense.SETTLE_FLAG == 'N' && expense.PAID_BY_USER_ID != this.state.userID ? <h6 class="card-title" style={{ textAlign: "right", color: "#8a8f94" }}><strong>{expense.USER_NAME + " Paid"}</strong></h6>: null}
+                                    {expense.SETTLE_FLAG == 'N' && expense.PAID_BY_USER_ID == this.state.userID ? <h6 class="card-title" style={{ textAlign: "right", color: "#8a8f94" }}><strong>{"You Paid"}</strong></h6>: null}
                                 </div>
                                 <div class="row">
-                                    <h6 class="card-title" style={{ textAlign: "right" }}><strong>{expense.CURRENCY + expense.AMOUNT}</strong></h6>
+                                {expense.SETTLE_FLAG == 'N' ? <h6 class="card-title" style={{ textAlign: "right" }}><strong>{expense.CURRENCY + expense.AMOUNT}</strong></h6> : null }
                                 </div>
                             </div>
                         </div>
@@ -152,9 +153,12 @@ class GroupPage extends Component {
             groupBalances = this.state.groupBalances.map((expense) => {
                 return <div class="card text-dark" style={{ width: '15rem' }}>
                     <div class="card-body">
-                        <h6 class="card-title"><strong>{expense.USER_NAME}</strong></h6>
+                        {expense.USER_ID != this.state.userID? <h6 class="card-title"><strong>{expense.USER_NAME}</strong></h6>: <h6 class="card-title"><strong>{"Your balance:"}</strong></h6>}
                         <h6 class="card-title"><strong>{expense.CURRENCY}</strong></h6>
-                        {expense.OWE_AMOUNT < 0 ? <h6 class="card-title" style={{ color: "#ed752f"}}><strong>{"Owes $" + Math.abs(expense.OWE_AMOUNT)}</strong></h6>: <h6 class="card-title" style={{ color: "#59cfa7" }}><strong>{"Gets back $" + expense.OWE_AMOUNT}</strong></h6>}
+                        {/* {expense.OWE_AMOUNT < 0 ? <h6 class="card-title" style={{ color: "#ed752f"}}><strong>{"Owes $" + Math.abs(expense.OWE_AMOUNT)}</strong></h6>: <h6 class="card-title" style={{ color: "#59cfa7" }}><strong>{"Gets back $" + expense.OWE_AMOUNT}</strong></h6>} */}
+                        {expense.OWE_AMOUNT < 0 ? <h6 class="card-title" style={{ color: "#ed752f"}}><strong>{"Owes $" + Math.abs(expense.OWE_AMOUNT)}</strong></h6>: null}
+                        {expense.OWE_AMOUNT > 0 ? <h6 class="card-title" style={{ color: "#59cfa7" }}><strong>{"Gets back $" + expense.OWE_AMOUNT}</strong></h6>: null}
+                        {expense.OWE_AMOUNT == 0 ? <h6 class="card-title" style={{ color: "#59cfa7"}}><strong>{"Balances settled up"}</strong></h6>: null}
                     </div>
                 </div>
             })

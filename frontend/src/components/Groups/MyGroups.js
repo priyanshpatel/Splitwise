@@ -21,10 +21,12 @@ class MyGroups extends Component {
             MsgFlag: false,
             acceptFlag: null,
             rejectFlag: null,
-            searchInput: null
+            searchInput: null,
+            leaveFlag: null
         }
         this.acceptInvite = this.acceptInvite.bind(this);
         this.rejectInvite = this.rejectInvite.bind(this);
+        this.leaveGroup = this.leaveGroup.bind(this);
     }
     componentWillMount() {
         this.setState({
@@ -121,6 +123,37 @@ class MyGroups extends Component {
         const emptyInvitesFlag = newPendingInvites.length == 0 ? true : false;
         this.setState({
             pendingInvites: newPendingInvites,
+            emptyInvitesFlag
+        })
+    }
+
+    leaveGroup = (group) => {
+        const data = {
+            userID: parseInt(cookie.load('userID')),
+            groupID: group.GROUP_ID,
+            flag: 'L'
+        }
+        axios.defaults.withCredentials = true;
+        axios.post('http://localhost:3001/groups/leave', data)
+            .then(response => {
+                if (response.state === 200) {
+                    console.log("Group left successfully");
+                } else if(response.state === 201){
+                    this.setState({
+                        leaveFlag: true,
+                        errorMessage: response.data
+                    })
+                }
+            }).catch(e => {
+                console.log(e);
+            })
+
+        const newAcceptedInvites = this.state.acceptedInvites.filter((invite) => {
+            return group.GROUP_ID != invite.GROUP_ID
+        });
+        const emptyInvitesFlag = newAcceptedInvites.length == 0 ? true : false;
+        this.setState({
+            acceptedInvites: newAcceptedInvites,
             emptyInvitesFlag
         })
     }
@@ -269,7 +302,7 @@ class MyGroups extends Component {
                                 </div>
                             </div>
                         </div>
-
+                        {this.state.leaveFlag ? <div class="alert alert-danger" role="alert">{this.state.errorMessage}</div> : null}
                     </div>
                 </BrowserRouter>
             </div>

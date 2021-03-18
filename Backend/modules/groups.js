@@ -166,24 +166,24 @@ router.post('/acceptrejectinvite', (req, res) => {
 
 })
 
-router.post('/leave', (req, res) => {
-    const groupID = req.body.groupID;
-    const userID = req.body.userID;
+// router.post('/leave', (req, res) => {
+//     const groupID = req.body.groupID;
+//     const userID = req.body.userID;
 
-    const leaveGroupQuery = "DELETE FROM USER_GROUP_MAP WHERE GROUP_ID = " + groupID + " AND USER_ID = " + userID
-    console.log(leaveGroupQuery);
+//     const leaveGroupQuery = "DELETE FROM USER_GROUP_MAP WHERE GROUP_ID = " + groupID + " AND USER_ID = " + userID
+//     console.log(leaveGroupQuery);
 
-    con.query(leaveGroupQuery, function (err, result, fields) {
-        if (err) {
-            console.log("Error while leaving group");
-            res.status(500).send("Error while leaving group");
-            return;
-        } else {
-            console.log(result);
-            res.status(200).send(result);
-        }
-    });
-})
+//     con.query(leaveGroupQuery, function (err, result, fields) {
+//         if (err) {
+//             console.log("Error while leaving group");
+//             res.status(500).send("Error while leaving group");
+//             return;
+//         } else {
+//             console.log(result);
+//             res.status(200).send(result);
+//         }
+//     });
+// })
 
 router.get('/groupdetails/:groupID', (req, res) => {
     const groupID = req.params.groupID;
@@ -265,7 +265,8 @@ router.get('/search/groups/:userID', (req, res) => {
 
 router.get('/groupbalances/:groupID', (req, res) => {
     const groupID = req.params.groupID
-    const groupExpenseQuery = "SELECT UGM.GROUP_ID, UGM.USER_ID , U.USER_NAME, (SELECT SUM(T.AMOUNT) FROM `TRANSACTION` T WHERE T.GROUP_ID = UGM.GROUP_ID AND T.PAID_BY_USER_ID = UGM.USER_ID AND T.TRAN_TYPE = 6 AND T.SETTLED_FLAG = 'N') - (SELECT SUM(T.AMOUNT) FROM `TRANSACTION` T WHERE T.GROUP_ID = UGM.GROUP_ID AND T.PAID_FOR_USER_ID = UGM.USER_ID AND T.TRAN_TYPE = 6 AND T.SETTLED_FLAG = 'N') AS OWE_AMOUNT FROM USER_GROUP_MAP UGM, USERS U WHERE U.USER_ID = UGM.USER_ID AND UGM.GROUP_ID = " + groupID
+    // const groupExpenseQuery = "SELECT UGM.GROUP_ID, UGM.USER_ID , U.USER_NAME, (SELECT SUM(T.AMOUNT) FROM `TRANSACTION` T WHERE T.GROUP_ID = UGM.GROUP_ID AND T.PAID_BY_USER_ID = UGM.USER_ID AND T.TRAN_TYPE = 6 AND T.SETTLED_FLAG = 'N') - (SELECT SUM(T.AMOUNT) FROM `TRANSACTION` T WHERE T.GROUP_ID = UGM.GROUP_ID AND T.PAID_FOR_USER_ID = UGM.USER_ID AND T.TRAN_TYPE = 6 AND T.SETTLED_FLAG = 'N') AS OWE_AMOUNT FROM USER_GROUP_MAP UGM, USERS U WHERE U.USER_ID = UGM.USER_ID AND UGM.GROUP_ID = " + groupID
+    const groupExpenseQuery = "SELECT UGM.GROUP_ID, UGM.USER_ID , U.USER_NAME, (SELECT IFNULL(SUM(T.AMOUNT),0) FROM `TRANSACTION` T WHERE T.GROUP_ID = UGM.GROUP_ID AND T.PAID_BY_USER_ID = UGM.USER_ID AND T.TRAN_TYPE = 6 AND T.SETTLED_FLAG = 'N') - (SELECT IFNULL(SUM(T.AMOUNT),0) FROM `TRANSACTION` T WHERE T.GROUP_ID = UGM.GROUP_ID AND T.PAID_FOR_USER_ID = UGM.USER_ID AND T.TRAN_TYPE = 6 AND T.SETTLED_FLAG = 'N') AS OWE_AMOUNT FROM USER_GROUP_MAP UGM, USERS U WHERE U.USER_ID = UGM.USER_ID AND UGM.GROUP_ID = " + groupID
     con.query(groupExpenseQuery, function (err, result, fields) {
         if (err) {
             res.status(500).send(err);
@@ -277,12 +278,43 @@ router.get('/groupbalances/:groupID', (req, res) => {
 
 router.get('/groupexpenses/:groupID', (req, res) => {
     const groupID = req.params.groupID
-    const groupExpenseQuery = "SELECT E.*, U.USER_NAME FROM EXPENSES E, USERS U WHERE U.USER_ID = E.PAID_BY_USER_ID AND E.GROUP_ID = "+ groupID +" ORDER BY EXP_ID DESC"
+    const groupExpenseQuery = "SELECT E.*, U.USER_NAME, (SELECT S.USER_NAME FROM USERS S WHERE S.USER_ID = E.SETTLED_WITH_USER_ID) AS SETTLED_WITH_USER_NAME FROM EXPENSES E, USERS U WHERE U.USER_ID = E.PAID_BY_USER_ID AND E.GROUP_ID = " + groupID + " ORDER BY EXP_ID DESC"
     con.query(groupExpenseQuery, function (err, result, fields) {
         if (err) {
             res.status(500).send(err);
         } else {
             res.status(200).send(result);
+        }
+    });
+});
+
+router.post('/leave', (req, res) => {
+    const groupID = req.body.groupID;
+    const userID = req.body.userID;
+
+    const getDebtQuery = "SELECT IFNULL(SUM(D.AMOUNT),0) AS DEBT_AMOUNT FROM DEBTS D WHERE D.GROUP_ID = " + groupID + " AND (D.USER_ID_1 = " + userID + " OR D.USER_ID_2 = " + userID + ")";
+    const leaveGroupQuery = "UPDATE USER_GROUP_MAP SET INVITE_FLAG = 'L' WHERE GROUP_ID = " + groupID + " AND USER_ID = " + userID
+    con.query(getDebtQuery, function (err, result, fields) {
+        if (err) {
+            res.status(500).send(err);
+            return;
+        } else {
+            const debtAmount = result[0].DEBT_AMOUNT;
+            if (debtAmount != 0) {
+                res.status(201).send("Please settle up your balance first")
+            }
+            else {
+                con.query(leaveGroupQuery, function (err, result, fields) {
+                    if (err) {
+                        console.log(err);
+                        //res.status(500).send("Error while leaving group");
+                        return;
+                    } else {
+                        console.log(result);
+                        res.status(200).send("Left group successfully");
+                    }
+                });
+            }
         }
     });
 });

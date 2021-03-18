@@ -23,6 +23,7 @@ class AcceptedGroups extends Component {
         console.log(this.state.GROUP_ID);
         console.log(this.state.GROUP_NAME);
         console.log(this.state.INVITE_FLAG);
+        console.log(this.props.data);
     }
 
     render() {
@@ -32,7 +33,8 @@ class AcceptedGroups extends Component {
                 <div class="card-body">
                     <h6 class="card-title"><strong>{this.state.GROUP_NAME}</strong></h6>
                     <a href={"/grouppage/"+this.state.GROUP_ID} class="btn btn-outline-primary">Details</a>&nbsp;
-                    <a href="" class="btn btn-outline-danger">Leave</a>
+                    <a href="" class="btn btn-outline-danger" onClick={this.props.leaveGroup.bind(this, this.state)}>Leave</a>&nbsp;
+                    {/* <a href="" class="btn btn-outline-secondary" onClick={this.props.editGroup.bind(this, this.state)}>Edit</a> */}
                 </div>
             </div>
             </BrowserRouter>

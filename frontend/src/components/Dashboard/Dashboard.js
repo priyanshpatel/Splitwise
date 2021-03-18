@@ -10,16 +10,16 @@ import Settle from "./Settle"
 
 const customStyles = {
     content: {
-      top: "40%",
-      left: "50%",
-      right: "auto",
-      bottom: "auto",
-      marginRight: "-50%",
-      height: "250px",
-      width: "500px",
-      transform: "translate(-50%, -50%)",
+        top: "40%",
+        left: "50%",
+        right: "auto",
+        bottom: "auto",
+        marginRight: "-50%",
+        height: "250px",
+        width: "500px",
+        transform: "translate(-50%, -50%)",
     },
-  };
+};
 
 class Dashboard extends Component {
     constructor(props) {
@@ -31,7 +31,8 @@ class Dashboard extends Component {
             totalYouAreOwed: null,
             youOweList: [],
             youAreOwedList: [],
-            settleUpPopUp: false
+            settleUpPopUp: false,
+            dropDownList: []
         }
     }
 
@@ -114,7 +115,6 @@ class Dashboard extends Component {
             }).catch(e => {
                 console.log(e);
             })
-
     }
 
     toggleSettleUp = () => {
@@ -139,6 +139,8 @@ class Dashboard extends Component {
         let prefix = '+$'
         if (total_balance < 0) {
             prefix = '-$'
+        } else if (total_balance == 0) {
+            prefix = '$'
         }
 
         let youOweList = <div>You don't owe anything</div>
@@ -183,7 +185,7 @@ class Dashboard extends Component {
                                 <button class="btn btn-primary btn-md" onClick={this.toggleSettleUp} style={{ backgroundColor: "#59cfa7", border: "none" }}><strong>Settle up</strong></button>
                             </div>
                         </div>
-                        <div class="row" style={{ borderTop: "1px solid #a3a2a2"}}>
+                        <div class="row" style={{ borderTop: "1px solid #a3a2a2" }}>
                             <div class="col-4" style={{ textAlign: "center", paddingTop: "10px" }}>
                                 {/* borderLeft: "1px solid #a3a2a2" */}
                                 {/* <span>total balance</span> */}
@@ -226,20 +228,22 @@ class Dashboard extends Component {
                             </div>
                             {/* <hr /> */}
                         </div>
-                        <hr/>
+                        <hr />
                         <div class="row">
                             <div class="col-6">
                                 <h6 style={{ color: "#8a8f94" }}><strong>YOU OWE</strong></h6>
                                 {youOweList}
+                                {youOweList.length < 1 ? <div class="alert alert-success" role="alert">You do not owe anything</div> : null}
                             </div>
                             <div class="col-6">
                                 <h6 style={{ color: "#8a8f94" }}><strong>YOU ARE OWED</strong></h6>
                                 {youAreOwedList}
+                                {youAreOwedList.length < 1 ? <div class="alert alert-success" role="alert">You are not owed anything</div> : null}
                             </div>
                         </div>
                         <Modal style={customStyles} isOpen={this.state.settleUpPopUp} ariaHideApp={false}>
-                        <Settle data = {this.state} closePopUp={this.toggleSettleUp} />
-                    </Modal>
+                            <Settle data={this.state} closePopUp={this.toggleSettleUp} />
+                        </Modal>
                     </div>
                 </BrowserRouter>
             </div>

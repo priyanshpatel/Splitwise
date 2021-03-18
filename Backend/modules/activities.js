@@ -132,4 +132,18 @@ router.post('/settleup', (req, res) => {
 
 });
 
+router.get('/settleup/dropdown/:userID', (req, res) => {
+    const userID = req.params.userID
+    const dropdownQuery = "SELECT U.USER_ID AS USER_ID, CONCAT(U.USER_NAME,'(',U.USER_EMAIL,')') AS USER_NAME_EMAIL FROM DEBTS D, USERS U WHERE U.USER_ID = D.USER_ID_1 AND D.AMOUNT != 0 AND D.USER_ID_2 = " + userID + " UNION SELECT U.USER_ID AS USER_ID, CONCAT(U.USER_NAME,'(',U.USER_EMAIL,')') AS USER_NAME_EMAIL FROM DEBTS D, USERS U WHERE U.USER_ID = D.USER_ID_2 AND D.AMOUNT != 0 AND D.USER_ID_1 = " + userID;
+    con.query(dropdownQuery, function (err, result, fields) {
+        if (err) {
+            console.log(err);
+            res.status(500).send('Error');
+            return;
+        } else {
+            res.status(200).send(result)
+        }
+    });
+});
+
 module.exports = router;
