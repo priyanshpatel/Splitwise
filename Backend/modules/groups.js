@@ -3,15 +3,54 @@ const { group } = require('console');
 const express = require('express');
 const router = express.Router();
 const con = require('./database');
+const multer = require('multer');
+const path = require('path');
 
-router.post('/create', (req, res) => {
+// set storage
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, "./public/uploads/group/");
+    },
+    filename: function (req, file, cb) {
+        // console.log(req);
+        cb(
+            null,
+            file.fieldname +
+            "_" +
+            Math.floor(Math.random()*100) +
+            "_" +
+            Date.now() +
+            path.extname(file.originalname)
+        );
+    },
+});
+
+// Middleware to upload images where the image size should be less than 5MB
+const uploadGroupImage = multer({
+    storage,
+    limits: {
+      fileSize: 1024 * 1024 * 5,
+    },
+  });
+
+// router.post('/create', (req, res) => {
+    router.post('/create', uploadGroupImage.single("groupPicture"), (req, res) => {
+    console.log(req.body.groupMembers[0].value)
     const userID = req.body.userID
     const groupName = req.body.groupName
-    const groupPicture = req.body.groupPicture
+    // const groupPicture = req.body.groupPicture
     const groupMembers = req.body.groupMembers
+    console.log("{}{}{}{}{}{}Group Members{}{}{}{}{}");
+    console.log(groupMembers);
     const ts = new Date().toISOString().slice(0, 19).replace('T', ' ');
     const groupCount = 0;
     let groupID = null;
+
+    let imagePath = null;
+    if (req.file) {
+        // console.log(req.file);
+      imagePath = req.file.path.substring(req.file.path.indexOf("/") + 1);
+    }
 
     const groupCountQuery = "SELECT COUNT(0) AS COUNT FROM EXPENSE_GROUPS WHERE GROUP_NAME = '" + groupName + "'";
     console.log(groupCountQuery);
@@ -25,7 +64,7 @@ router.post('/create', (req, res) => {
             res.status(201).send("Group name already exists");
             return;
         } else {
-            const createGroupQuery = "INSERT INTO EXPENSE_GROUPS(GROUP_NAME, CREATED_BY, CREATE_DATE, GROUP_PICTURE) VALUES ('" + groupName + "'," + userID + ",'" + ts + "','" + groupPicture + "')";
+            const createGroupQuery = "INSERT INTO EXPENSE_GROUPS(GROUP_NAME, CREATED_BY, CREATE_DATE, GROUP_PICTURE) VALUES ('" + groupName + "'," + userID + ",'" + ts + "','" + imagePath + "')";
 
             con.query(createGroupQuery, function (err, result, fields) {
                 if (err) {
@@ -53,8 +92,11 @@ router.post('/create', (req, res) => {
                             res.status(500).send('Error');
                             return;
                         }
-                        for (let i = 0; i < groupMembers.length; i++) {
-                            const memUserID = req.body.groupMembers[i].value;
+                        const groupMembersList = groupMembers.split(',')
+                        for (let i = 0; i < groupMembersList.length; i++) {
+                            //const memUserID = req.body.groupMembers[i].value;
+                            const memUserID = groupMembersList[i]
+                            console.log(memUserID);
                             const memAddQuery = "INSERT INTO USER_GROUP_MAP(USER_ID, GROUP_ID, ADDED_BY, ADDED_DATE, INVITE_FLAG) SELECT " + memUserID + ", EXPENSE_GROUPS.GROUP_ID, " + userID + ", '" + ts + "', 'P' FROM EXPENSE_GROUPS WHERE EXPENSE_GROUPS.GROUP_NAME = '" + groupName + "'";
                             console.log(memAddQuery);
                             con.query(memAddQuery, function (err, result, fields) {
@@ -202,11 +244,18 @@ router.get('/groupdetails/:groupID', (req, res) => {
     });
 });
 
-router.post('/update', (req, res) => {
+router.post('/update', uploadGroupImage.single("groupPicture"), (req, res) => {
     const groupID = req.body.groupID;
     const groupName = req.body.groupName;
-    const groupPicture = req.body.groupPicture;
-    const updateGroupDetails = "UPDATE EXPENSE_GROUPS SET GROUP_NAME = '" + groupName + "', GROUP_PICTURE = '" + groupPicture + "' WHERE GROUP_ID = " + groupID
+    // const groupPicture = req.body.groupPicture;
+
+    let imagePath = null;
+    if (req.file) {
+        // console.log(req.file);
+      imagePath = req.file.path.substring(req.file.path.indexOf("/") + 1);
+    }
+
+    const updateGroupDetails = "UPDATE EXPENSE_GROUPS SET GROUP_NAME = '" + groupName + "', GROUP_PICTURE = '" + imagePath + "' WHERE GROUP_ID = " + groupID
 
     con.query(updateGroupDetails, function (err, result, fields) {
         if (err) {

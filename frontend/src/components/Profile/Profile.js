@@ -22,7 +22,6 @@ class Profile extends Component {
             errorMessage: "",
             authFlag: null,
             imageUpdateFlag: false,
-            profilePicture: "",
             image: null,
             updateFlag: false,
             Msg: ""

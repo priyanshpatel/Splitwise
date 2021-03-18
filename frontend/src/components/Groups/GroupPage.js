@@ -11,6 +11,7 @@ import Moment from 'react-moment'
 import Modal from 'react-modal';
 import AddExpense from "./AddExpense"
 import config from "../../config.json";
+import EditGroup from "./EditGroup"
 
 
 const customStyles = {
@@ -26,6 +27,19 @@ const customStyles = {
     },
   };
 
+  const customStyles_2 = {
+    content: {
+      top: "40%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      height: "500px",
+      width: "500px",
+      transform: "translate(-50%, -50%)",
+    },
+  };
+
 class GroupPage extends Component {
     constructor(props) {
         super(props);
@@ -35,7 +49,10 @@ class GroupPage extends Component {
             userID: null,
             groupExpenses: [],
             groupBalances: [],
-            addExpensePopUp: false
+            addExpensePopUp: false,
+            editGroupPopUp: false,
+            GROUP_PICTURE: "",
+            image: null
         }
     }
 
@@ -54,7 +71,9 @@ class GroupPage extends Component {
             .then(response => {
                 if (response.status === 200) {
                     this.setState({
-                        GROUP_NAME: response.data[0].GROUP_NAME
+                        GROUP_NAME: response.data[0].GROUP_NAME,
+                        GROUP_PICTURE: response.data[0].GROUP_PICTURE,
+                        image: config.API_URL + "/" + response.data[0].GROUP_PICTURE
                     });
                 }
             }).catch(e => {
@@ -94,6 +113,14 @@ class GroupPage extends Component {
         console.log(this.state.addExpensePopUp);
         this.setState({
             addExpensePopUp: !this.state.addExpensePopUp
+        })
+    }
+
+    toggleEditGroup = () => {
+        console.log("ADD EXPENSE");
+        console.log(this.state.editGroupPopUp);
+        this.setState({
+            editGroupPopUp: !this.state.editGroupPopUp
         })
     }
 
@@ -178,7 +205,7 @@ class GroupPage extends Component {
 
                         </div>
                         <div class="col-4">
-                            <h3><strong>{this.state.GROUP_NAME}  <button class="btn btn-primary" style={{ backgroundColor: "#59cfa7", border: "none" }}><i class="fa fa-edit"></i></button></strong></h3><br />
+                            <h3><strong>{this.state.GROUP_NAME}  <button class="btn btn-primary" style={{ backgroundColor: "#59cfa7", border: "none" }} onClick={this.toggleEditGroup}><i class="fa fa-edit"></i></button></strong></h3><br />
                         </div>
                         <div class="col-4">
                             <button class="btn btn-primary" style={{ backgroundColor: "#ed752f", border: "none" }} onClick={this.toggleAddExpense}><strong>Add an expense</strong></button>
@@ -207,6 +234,9 @@ class GroupPage extends Component {
                     </div>
                     <Modal style={customStyles} isOpen={this.state.addExpensePopUp} ariaHideApp={false}>
                         <AddExpense data = {this.state} closePopUp={this.toggleAddExpense} />
+                    </Modal>
+                    <Modal style={customStyles_2} isOpen={this.state.editGroupPopUp} ariaHideApp={false}>
+                        <EditGroup data = {this.state} closePopUp={this.toggleEditGroup} />
                     </Modal>
                 </div>
             </div>
