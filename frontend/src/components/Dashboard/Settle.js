@@ -7,6 +7,7 @@ import axios from 'axios';
 import AsyncSelect from "react-select/async";
 import PropTypes from 'prop-types';
 import { Button } from 'semantic-ui-react'
+import config from "../../config.json";
 
 class Settle extends Component {
     constructor(props) {
@@ -24,7 +25,7 @@ class Settle extends Component {
 
     componentDidMount() {
         axios.defaults.withCredentials = true;
-        axios.get('http://localhost:3001/activities/settleup/dropdown/' + this.state.userID)
+        axios.get(config.API_URL+'/activities/settleup/dropdown/' + this.state.userID)
             .then(response => {
                 console.log(response.data);
                 if (response.status === 200) {
@@ -57,7 +58,7 @@ class Settle extends Component {
             console.log(data);
 
             axios.defaults.withCredentials = true;
-            axios.post('http://localhost:3001/activities/settleup', data)
+            axios.post(config.API_URL+'/activities/settleup', data)
                 .then(response => {
                     console.log("=========Inside frontend===========");
                     console.log("Status Code: ", response.status);

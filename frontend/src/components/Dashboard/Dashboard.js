@@ -6,7 +6,8 @@ import Navbar from '../LandingPage/Navbar';
 import splitwise_logo from '../../images/splitwise_logo.png';
 import axios from 'axios';
 import Modal from 'react-modal';
-import Settle from "./Settle"
+import Settle from "./Settle";
+import config from "../../config.json";
 
 const customStyles = {
     content: {
@@ -50,7 +51,7 @@ class Dashboard extends Component {
         console.log(data);
 
         axios.defaults.withCredentials = true;
-        axios.get('http://localhost:3001/dashboard/total_balance/' + cookie.load('userID'))
+        axios.get(config.API_URL+'/dashboard/total_balance/' + cookie.load('userID'))
             .then(response => {
                 if (response.status === 200) {
                     console.log(response.data);
@@ -64,7 +65,7 @@ class Dashboard extends Component {
                 console.log(e);
             })
 
-        axios.get('http://localhost:3001/dashboard/total_you_owe/' + cookie.load('userID'))
+        axios.get(config.API_URL+'/dashboard/total_you_owe/' + cookie.load('userID'))
             .then(response => {
                 if (response.status === 200) {
                     console.log(response.data);
@@ -76,7 +77,7 @@ class Dashboard extends Component {
                 console.log(e);
             })
 
-        axios.get('http://localhost:3001/dashboard/total_you_are_owed/' + cookie.load('userID'))
+        axios.get(config.API_URL+'/dashboard/total_you_are_owed/' + cookie.load('userID'))
             .then(response => {
                 if (response.status === 200) {
                     console.log(response.data);
@@ -88,7 +89,7 @@ class Dashboard extends Component {
                 console.log(e);
             })
 
-        axios.get('http://localhost:3001/dashboard/you_are_owed/' + cookie.load('userID'))
+        axios.get(config.API_URL+'/dashboard/you_are_owed/' + cookie.load('userID'))
             .then(response => {
                 if (response.status === 200) {
                     console.log(response.data);
@@ -100,7 +101,7 @@ class Dashboard extends Component {
                 console.log(e);
             })
 
-        axios.get('http://localhost:3001/dashboard/you_owe/' + cookie.load('userID'))
+        axios.get(config.API_URL+'/dashboard/you_owe/' + cookie.load('userID'))
             .then(response => {
                 if (response.status === 200) {
                     console.log("[[[[[[[[[inside if]]]]]]]]]]");

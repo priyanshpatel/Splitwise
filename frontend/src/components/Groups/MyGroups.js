@@ -7,6 +7,7 @@ import axios from 'axios';
 import AsyncSelect from "react-select/async";
 import PendingGroups from "./PendingGroups";
 import AcceptedGroups from "./AcceptedGroups";
+import config from "../../config.json";
 
 class MyGroups extends Component {
     constructor(props) {
@@ -37,7 +38,7 @@ class MyGroups extends Component {
         console.log("============component did mount===============");
         console.log(cookie.load('userID'));
         axios.defaults.withCredentials = true;
-        axios.get('http://localhost:3001/groups/mygroupspending/' + cookie.load('userID'))
+        axios.get(config.API_URL+'/groups/mygroupspending/' + cookie.load('userID'))
             .then(response => {
                 if (response.status === 200) {
                     this.setState({
@@ -68,7 +69,7 @@ class MyGroups extends Component {
 
         console.log("============component did mount===============");
         console.log(cookie.load('userID'));
-        axios.get('http://localhost:3001/groups/mygroups/' + cookie.load('userID'))
+        axios.get(config.API_URL+'/groups/mygroups/' + cookie.load('userID'))
             .then(response => {
                 if (response.status === 200) {
                     this.setState({
@@ -105,7 +106,7 @@ class MyGroups extends Component {
             flag: 'R'
         }
         axios.defaults.withCredentials = true;
-        axios.post('http://localhost:3001/groups/acceptrejectinvite', data)
+        axios.post(config.API_URL+'/groups/acceptrejectinvite', data)
             .then(response => {
                 if (response.state === 200) {
                     console.log(response);
@@ -134,7 +135,7 @@ class MyGroups extends Component {
             flag: 'L'
         }
         axios.defaults.withCredentials = true;
-        axios.post('http://localhost:3001/groups/leave', data)
+        axios.post(config.API_URL+'/groups/leave', data)
             .then(response => {
                 if (response.state === 200) {
                     console.log("Group left successfully");
@@ -166,7 +167,7 @@ class MyGroups extends Component {
             flag: 'A'
         }
         axios.defaults.withCredentials = true;
-        axios.post('http://localhost:3001/groups/acceptrejectinvite', data)
+        axios.post(config.API_URL+'/groups/acceptrejectinvite', data)
             .then(response => {
                 if (response.state === 200) {
                     console.log(response);

@@ -5,6 +5,7 @@ import { Redirect } from 'react-router';
 import Navbar from '../LandingPage/Navbar';
 import axios from 'axios';
 import AsyncSelect from "react-select/async";
+import config from "../../config.json";
 
 class CreateGroup extends Component {
     constructor(props) {
@@ -27,7 +28,7 @@ class CreateGroup extends Component {
 
     searchOptions = (inp, callback) => {
         axios.defaults.withCredentials = true;
-        axios.get('http://localhost:3001/groups/search/users?keyword=' + inp)
+        axios.get(config.API_URL+'/groups/search/users?keyword=' + inp)
             .then(response => {
                 if (response.status === 200) {
                     const searchedUsers = response.data.users.map((user) => {
@@ -72,7 +73,7 @@ class CreateGroup extends Component {
             console.log(data);
 
             axios.defaults.withCredentials = true;
-            axios.post('http://localhost:3001/groups/create', data)
+            axios.post(config.API_URL+'/groups/create', data)
                 .then(response => {
                     console.log(response);
                     if (response.state === 200) {

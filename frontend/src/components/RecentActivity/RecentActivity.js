@@ -6,6 +6,7 @@ import Navbar from '../LandingPage/Navbar';
 import splitwise_logo from '../../images/splitwise_logo.png';
 import axios from 'axios';
 import Moment from 'react-moment';
+import config from "../../config.json";
 
 class RecentActivity extends Component {
     constructor(props) {
@@ -28,7 +29,7 @@ class RecentActivity extends Component {
     componentDidMount() {
         axios.defaults.withCredentials = true;
 
-        axios.get('http://localhost:3001/groups/mygroups/' + cookie.load('userID'))
+        axios.get(config.API_URL+'/groups/mygroups/' + cookie.load('userID'))
             .then(response => {
                 if (response.status === 200) {
                     this.setState({
@@ -42,7 +43,7 @@ class RecentActivity extends Component {
                 console.log(e);
             })
 
-        axios.get('http://localhost:3001/activities/recent_activity/' + cookie.load('userID') + '/' + this.state.groupSort + '/' + this.state.sort)
+        axios.get(config.API_URL+'/activities/recent_activity/' + cookie.load('userID') + '/' + this.state.groupSort + '/' + this.state.sort)
             .then(response => {
                 if (response.status === 200) {
                     this.setState({
@@ -60,7 +61,7 @@ class RecentActivity extends Component {
         this.setState({
             sort: e.target.value
         })
-        axios.get('http://localhost:3001/activities/recent_activity/' + cookie.load('userID') + '/' + this.state.groupSort + '/' + e.target.value)
+        axios.get(config.API_URL+'/activities/recent_activity/' + cookie.load('userID') + '/' + this.state.groupSort + '/' + e.target.value)
             .then(response => {
                 if (response.status === 200) {
                     this.setState({
@@ -78,7 +79,7 @@ class RecentActivity extends Component {
         this.setState({
             groupSort: e.target.value
         })
-        axios.get('http://localhost:3001/activities/recent_activity/' + cookie.load('userID') + '/' + e.target.value + '/' + this.state.sort)
+        axios.get(config.API_URL+'/activities/recent_activity/' + cookie.load('userID') + '/' + e.target.value + '/' + this.state.sort)
             .then(response => {
                 if (response.status === 200) {
                     this.setState({
@@ -132,8 +133,8 @@ class RecentActivity extends Component {
                         <div class="col-3" style={{ textAlign: "right" }}>
                             <div class="input-group mb-3">
                                 <select class="form-select" style={{ fontWeight: "bold" }} aria-label="user select" onChange={this.handleSort}>
-                                    <option selected value="1">Newest first</option>
-                                    <option value="2">Oldest first</option>
+                                    <option selected value="2">Newest first</option>
+                                    <option value="1">Oldest first</option>
                                 </select>
                             </div>
                         </div>

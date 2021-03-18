@@ -6,6 +6,8 @@ import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import Navbar from '../LandingPage/Navbar';
 import { BrowserRouter, Link } from 'react-router-dom';
+import config from "../../config.json";
+import { useHistory } from 'react-router-dom';
 
 class Signup extends Component {
     constructor(props) {
@@ -46,7 +48,7 @@ class Signup extends Component {
             userPassword: this.state.password
         }
         axios.defaults.withCredentials = true;
-        axios.post('http://localhost:3001/signup', data)
+        axios.post(config.API_URL + '/signup', data)
             .then(response => {
                 console.log("=========Inside frontend===========");
                 console.log("Status Code: ", response.status);
@@ -58,6 +60,56 @@ class Signup extends Component {
                         Msg: "Sign up success",
                         userID: response.data.userID
                     })
+                    // this.props.history.push("/login")
+                    const data = {
+                        userEmail: this.state.email,
+                        userPassword: this.state.password
+                    }
+                    axios.defaults.withCredentials = true;
+                    // axios.post('http://localhost:3001/login', data)
+                    axios.post(config.API_URL + '/login', data)
+                        .then(response => {
+                            console.log("=========Inside frontend===========");
+                            console.log("Status Code: ", response.status);
+                            console.log(response.data);
+                            if (response.status === 200) {
+                                //redirect to dashboard
+                                console.log(response.data);
+                                this.setState({
+                                    authFlag: false,
+                                    MsgFlag: false,
+                                    Msg: "login success",
+                                    userID: response.data.userID
+                                })
+                                cookie.save('userID', response.data.userID, { path: '/' })
+                                cookie.save('userEmail', response.data.userEmail, { path: '/' })
+                                cookie.save('userName', response.data.userName, { path: '/' })
+                                cookie.save('phoneNumber', response.data.phoneNumber, { path: '/' })
+                                cookie.save('timezone', response.data.timezone, { path: '/' })
+                                cookie.save('currency', response.data.currency, { path: '/' })
+                                cookie.save('language', response.data.language, { path: '/' })
+                                cookie.save('profilePicture', response.data.profilePicture, { path: '/' })
+                                this.props.history.push("/dashboard")
+                            } else if (response.status === 201) {
+                                //Invalid credentials
+                                console.log(response.data);
+                                this.setState({
+                                    authFlag: true,
+                                    MsgFlag: true,
+                                    Msg: "Invalid Credentials"
+                                })
+                            } else {
+                                //login failed
+                                console.log(response.data);
+                                this.setState({
+                                    authFlag: true,
+                                    MsgFlag: true,
+                                    Msg: "Login Failed"
+                                })
+                            }
+                        }).catch(e => {
+                            console.log("Inside catch");
+                        })
                 }
                 else if (response.status === 201) {
                     console.log("Email ID already registered");
@@ -80,8 +132,8 @@ class Signup extends Component {
     }
     render() {
         let redirectVar = null;
-        if(cookie.load('userID')){
-            redirectVar = <Redirect to= "/dashboard"/>
+        if (cookie.load('userID')) {
+            redirectVar = <Redirect to="/dashboard" />
         }
         return (
             <div>
@@ -111,7 +163,7 @@ class Signup extends Component {
                                         <br />
                                         <button class="btn btn-primary btn-lg" type="submit" style={{ backgroundColor: "#ed752f", border: "none" }}>Sign me up!</button>
                                     </form>
-                                    <br/>
+                                    <br />
                                     {this.state.MsgFlag ? <div class="alert alert-danger" role="alert">{this.state.Msg}</div> : null}
                                 </div>
                             </div>

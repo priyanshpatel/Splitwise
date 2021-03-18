@@ -5,6 +5,7 @@ import { Redirect } from 'react-router';
 import Navbar from '../LandingPage/Navbar';
 import splitwise_logo from '../../images/splitwise_logo.png';
 import axios from 'axios';
+import config from "../../config.json";
 
 class Login extends Component {
     constructor(props) {
@@ -43,7 +44,8 @@ class Login extends Component {
             userPassword: this.state.password
         }
         axios.defaults.withCredentials = true;
-        axios.post('http://localhost:3001/login', data)
+        // axios.post('http://localhost:3001/login', data)
+        axios.post(config.API_URL+'/login', data)
             .then(response => {
                 console.log("=========Inside frontend===========");
                 console.log("Status Code: ", response.status);

@@ -7,6 +7,7 @@ import axios from 'axios';
 import AsyncSelect from "react-select/async";
 import PropTypes from 'prop-types';
 import { Button } from 'semantic-ui-react'
+import config from "../../config.json";
 
 class AddExpense extends Component {
     constructor(props) {
@@ -63,7 +64,7 @@ class AddExpense extends Component {
             console.log(data);
 
             axios.defaults.withCredentials = true;
-            axios.post('http://localhost:3001/expenses/add', data)
+            axios.post(config.API_URL+'/expenses/add', data)
                 .then(response => {
                     console.log("=========Inside frontend===========");
                     console.log("Status Code: ", response.status);

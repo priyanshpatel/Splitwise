@@ -5,6 +5,7 @@ import { Redirect } from 'react-router';
 import Navbar from '../LandingPage/Navbar';
 import splitwise_logo from '../../images/splitwise_logo.png';
 import axios from 'axios';
+import config from "../../config.json";
 
 class Profile extends Component {
     constructor(props) {
@@ -31,7 +32,7 @@ class Profile extends Component {
         console.log("============component did mount===============");
         console.log(cookie.load('userID'));
         axios.defaults.withCredentials = true;
-        axios.get('http://localhost:3001/profile/' + cookie.load('userID'))
+        axios.get(config.API_URL+'/profile/' + cookie.load('userID'))
             .then(response => {
                 if (response.status === 200) {
                     this.setState({
@@ -81,7 +82,7 @@ class Profile extends Component {
         console.log(data);
 
         axios.defaults.withCredentials = true;
-        axios.post('http://localhost:3001/profile/update', data)
+        axios.post(config.API_URL+'/profile/update', data)
             .then(response => {
                 if (response.state === 200) {
                     this.setState({

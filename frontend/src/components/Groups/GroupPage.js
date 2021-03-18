@@ -10,6 +10,7 @@ import Moment from 'react-moment'
 // import { Modal } from 'semantic-ui-react';
 import Modal from 'react-modal';
 import AddExpense from "./AddExpense"
+import config from "../../config.json";
 
 
 const customStyles = {
@@ -49,7 +50,7 @@ class GroupPage extends Component {
         })
 
         axios.defaults.withCredentials = true;
-        axios.get('http://localhost:3001/groups/groupdetails/' + this.props.match.params.groupid)
+        axios.get(config.API_URL+'/groups/groupdetails/' + this.props.match.params.groupid)
             .then(response => {
                 if (response.status === 200) {
                     this.setState({
@@ -61,7 +62,7 @@ class GroupPage extends Component {
                 console.log(e);
             })
 
-        axios.get('http://localhost:3001/groups/groupexpenses/' + this.props.match.params.groupid)
+        axios.get(config.API_URL+'/groups/groupexpenses/' + this.props.match.params.groupid)
             .then(response => {
                 if (response.status === 200) {
                     console.log(response.data);
@@ -74,7 +75,7 @@ class GroupPage extends Component {
                 console.log(e);
             })
 
-        axios.get('http://localhost:3001/groups/groupbalances/' + this.props.match.params.groupid)
+        axios.get(config.API_URL+'/groups/groupbalances/' + this.props.match.params.groupid)
             .then(response => {
                 if (response.status === 200) {
                     console.log(response.data);
