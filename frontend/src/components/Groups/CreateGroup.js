@@ -110,7 +110,7 @@ class CreateGroup extends Component {
             })
                 .then(response => {
                     console.log(response);
-                    if (response.state === 200) {
+                    if (response.status === 200) {
                         this.setState({
                             authFlag: true,
                             MsgFlag: false,
@@ -122,6 +122,7 @@ class CreateGroup extends Component {
                         //this.props.history.push("/dashboard")
                         //window.location.reload()
                         // this.props.history.push("/mygroups")
+                        window.location.assign("/mygroups")
                     } else if (response.status === 201) {
                         this.setState({
                             authFlag: true,
