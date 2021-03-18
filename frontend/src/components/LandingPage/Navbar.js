@@ -66,7 +66,7 @@ class Navbar extends Component {
                         height: "50px",
                     }}>
                         <div class="container">
-                            <a class="navbar-brand" href="#">
+                            <a class="navbar-brand" href="/">
                                 {/* <img src="https://lh3.googleusercontent.com/proxy/u5Jk4tgNiM-h3mYXjxrqeDClx4Qp5tyiMvrAdPrqaoaBt_obioNdG1FX1wL6K8yKsUyYpPEbp-zfcxeynL4K-RQiQ5hW-QBJWMURbAsn_NkqaFuOH0I" width="40" height="40" class="d-inline-block align-top" alt=""/> */}
                                 <img src={splitwise_logo} width="40" height="40" class="d-inline-block align-top" alt="" href="/" />
                                 <span style={{ paddingLeft: "10px", color: "white" }}><strong>Splitwise</strong></span>
