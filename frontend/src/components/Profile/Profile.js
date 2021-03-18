@@ -20,7 +20,12 @@ class Profile extends Component {
             language: null,
             profilePicture: null,
             errorMessage: "",
-            authFlag: null
+            authFlag: null,
+            imageUpdateFlag: false,
+            profilePicture: "",
+            image: null,
+            updateFlag: false,
+            Msg: ""
         };
         this.ChangeHandler = this.ChangeHandler.bind(this);
         this.submitUpdate = this.submitUpdate.bind(this);
@@ -32,7 +37,7 @@ class Profile extends Component {
         console.log("============component did mount===============");
         console.log(cookie.load('userID'));
         axios.defaults.withCredentials = true;
-        axios.get(config.API_URL+'/profile/' + cookie.load('userID'))
+        axios.get(config.API_URL + '/profile/' + cookie.load('userID'))
             .then(response => {
                 if (response.status === 200) {
                     this.setState({
@@ -42,7 +47,8 @@ class Profile extends Component {
                         timezone: response.data.timezone,
                         currency: response.data.currency,
                         language: response.data.language,
-                        profilePicture: response.data.profilePicture
+                        profilePicture: response.data.profilePicture,
+                        image: config.API_URL + "/" + response.data.profilePicture
                     });
                     console.log("===========inside 200==============");
                     console.log(response.data);
@@ -59,6 +65,14 @@ class Profile extends Component {
         })
     }
 
+    handleImageChange = (e) => {
+        this.setState({
+            imageUpdateFlag: true,
+            image: URL.createObjectURL(e.target.files[0]),
+            profilePicture: e.target.files[0],
+        })
+    }
+
     submitUpdate = (e) => {
         console.log("===============submit update==============");
         console.log(this.state.userName);
@@ -68,25 +82,53 @@ class Profile extends Component {
         console.log(this.state.currency);
         console.log(this.state.language);
         e.preventDefault();
-        const data = {
-            userID: parseInt(cookie.load('userID')),
-            userName: this.state.userName,
-            userEmail: this.state.userEmail,
-            phoneNumber: this.state.phoneNumber,
-            timezone: this.state.timezone,
-            currency: this.state.currency,
-            language: this.state.language,
-            profilePicture: this.state.profilePicture
-        };
+
+        let formData = new FormData();
+        if (this.state.imageUpdateFlag) {
+            formData.append(
+                "profilePicture",
+                this.state.profilePicture,
+                this.state.profilePicture.name
+            );
+        }
+        formData.append("userID", parseInt(cookie.load('userID')));
+        formData.append("userName", this.state.userName);
+        formData.append("userEmail", this.state.userEmail);
+        formData.append("phoneNumber", this.state.phoneNumber);
+        formData.append("timezone", this.state.timezone);
+        formData.append("currency", this.state.currency);
+        formData.append("language", this.state.language);
+
+        // const data = {
+        //     userID: parseInt(cookie.load('userID')),
+        //     userName: this.state.userName,
+        //     userEmail: this.state.userEmail,
+        //     phoneNumber: this.state.phoneNumber,
+        //     timezone: this.state.timezone,
+        //     currency: this.state.currency,
+        //     language: this.state.language,
+        //     profilePicture: this.state.profilePicture
+        // };
         console.log("============update profile==============");
-        console.log(data);
+        // console.log(data);
 
         axios.defaults.withCredentials = true;
-        axios.post(config.API_URL+'/profile/update', data)
+        axios.post(config.API_URL + '/profile/update', formData, {
+            headers: Object.assign(
+                { "content-type": "multipart/form-data" }
+            )
+        })
             .then(response => {
+                this.setState({
+                    authFlag: true,
+                    updateFlag: true,
+                    Msg: "Profile successfully updated"
+                })
                 if (response.state === 200) {
                     this.setState({
-                        authFlag: true
+                        authFlag: true,
+                        updateFlag: true,
+                        Msg: "Profile successfully updated"
                     })
                     cookie.save('userEmail', this.state.userEmail, { path: '/' })
                     cookie.save('userName', this.state.userName, { path: '/' })
@@ -130,10 +172,12 @@ class Profile extends Component {
                                 <h3><strong>Your account</strong></h3>
                                 <br />
                                 Change your avatar
+                                {this.state.image != config.API_URL + '/null' ? <img src={this.state.image} width="200" height="200" alt="" /> : <img src={config.API_URL + '/uploads/profile/default_profile.png'} width="200" height="200" alt="" />}
                                 <input
                                     accept="image/x-png,image/gif,image/jpeg"
                                     type="file"
-                                    name="profileImage"
+                                    name="profilePicture"
+                                    onChange={this.handleImageChange}
                                 />
                             </div>
                             <div class="col-3">
@@ -147,6 +191,11 @@ class Profile extends Component {
 
                                     <label for="phoneNumber">Your phone number</label>
                                     <input class="form-input" style={{ fontWeight: "bold" }} value={this.state.phoneNumber} onChange={this.ChangeHandler} type="number" id="phoneNumber" class="form-control" name="phoneNumber" required></input>
+                                    <br />
+
+                                    <div class="row">
+                                        {this.state.updateFlag ? <div class="alert alert-success" role="alert">{this.state.Msg}</div> : null}
+                                    </div>
 
                                     {/* <br /> */}
                                     {/* <button class="btn btn-primary" type="submit" style={{ backgroundColor: "#ed752f", border: "none" }}>Save</button> */}
@@ -290,13 +339,15 @@ class Profile extends Component {
                                         <option value="XH">Xhosa</option>
                                     </select>
                                 </div>
-                                <br/>
+                                <br />
                                 <div class="form-group">
                                     <button class="btn btn-primary pull-right" type="submit" onClick={this.submitUpdate} style={{ backgroundColor: "#ed752f", border: "none" }}>Save</button>
+
                                 </div>
                             </div>
                             <div class="col-1"></div>
                             <div class="col-1"></div>
+
                         </div>
                     </div>
                 </BrowserRouter>

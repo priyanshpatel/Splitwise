@@ -178,12 +178,12 @@ class GroupPage extends Component {
 
                         </div>
                         <div class="col-4">
-                            <h3><strong>{this.state.GROUP_NAME}</strong></h3><br />
+                            <h3><strong>{this.state.GROUP_NAME}  <button class="btn btn-primary" style={{ backgroundColor: "#59cfa7", border: "none" }}><i class="fa fa-edit"></i></button></strong></h3><br />
                         </div>
-                        <div class="col-3">
+                        <div class="col-4">
                             <button class="btn btn-primary" style={{ backgroundColor: "#ed752f", border: "none" }} onClick={this.toggleAddExpense}><strong>Add an expense</strong></button>
                         </div>
-                        <div class="col-3">
+                        <div class="col-2">
 
                         </div>
                         <hr></hr>

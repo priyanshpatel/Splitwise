@@ -3,6 +3,36 @@ const express = require('express');
 const router = express.Router();
 // const bcrypt = require('bcrypt');
 const con = require('./database');
+const multer = require('multer');
+const path = require('path');
+
+// set storage
+console.log('Current directory: ' + process.cwd());
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, "./public/uploads/profile/");
+    },
+    filename: function (req, file, cb) {
+        // console.log(req);
+        cb(
+            null,
+            file.fieldname +
+            "_" +
+            Math.floor(Math.random()*100) +
+            "_" +
+            Date.now() +
+            path.extname(file.originalname)
+        );
+    },
+});
+
+// Middleware to upload images where the image size should be less than 5MB
+const uploadGroupImage = multer({
+    storage,
+    limits: {
+      fileSize: 1024 * 1024 * 5,
+    },
+  });
 
 router.get('/:userID', (req, res) => {
     //const userID = req.body.userID;
@@ -29,7 +59,7 @@ router.get('/:userID', (req, res) => {
     });
 });
 
-router.post('/update', (req, res) => {
+router.post('/update', uploadGroupImage.single("profilePicture"), (req, res) => {
     const userID = req.body.userID;
     const userName = req.body.userName;
     const userEmail = req.body.userEmail;
@@ -37,18 +67,23 @@ router.post('/update', (req, res) => {
     const currency = req.body.currency;
     const timezone = req.body.timezone;
     const language = req.body.language;
-    const profilePicture = req.body.profilePicture;
+    //const profilePicture = req.body.profilePicture;
+    
+    let imagePath = null;
+    if (req.file) {
+        // console.log(req.file);
+      imagePath = req.file.path.substring(req.file.path.indexOf("/") + 1);
+    }
+    console.log("Inside update profile post");
 
-    // console.log("Inside update profile post");
-
-    const updateProfileQuery = 'UPDATE USERS SET USER_NAME = "' + userName + '", USER_EMAIL = "' + userEmail + '", PHONE_NUMBER = ' + phoneNumber + ', CURRENCY = "' + currency + '", TIMEZONE = "' + timezone + '", LANGUAGE = "' + language + '", PROFILE_PICTURE = "' + profilePicture + '" WHERE USER_ID = ' + userID;
+    const updateProfileQuery = 'UPDATE USERS SET USER_NAME = "' + userName + '", USER_EMAIL = "' + userEmail + '", PHONE_NUMBER = ' + phoneNumber + ', CURRENCY = "' + currency + '", TIMEZONE = "' + timezone + '", LANGUAGE = "' + language + '", PROFILE_PICTURE = "' + imagePath + '" WHERE USER_ID = ' + userID;
     // console.log(updateProfileQuery);
 
     con.query(updateProfileQuery, function (err, result, fields) {
         if (err) {
-            if (err.errno== 1062) {
+            if (err.errno == 1062) {
                 res.status(201).send('Email ID already exists');
-            } else{
+            } else {
                 res.status(500).send('Error');
             }
         } else {

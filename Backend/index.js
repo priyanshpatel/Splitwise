@@ -50,6 +50,8 @@ app.use('/expenses', expenses)
 app.use('/dashboard', dashboard)
 app.use('/activities', activities)
 
+app.use(express.static("public"));
+
 app.listen(3001);
 console.log("Server Listening on port 3001");
 
