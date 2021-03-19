@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const PORT = process.env.PORT || 3001
 
 app.set('view engine', 'ejs');
 
@@ -52,6 +53,6 @@ app.use('/activities', activities)
 
 app.use(express.static("public"));
 
-app.listen(3001);
-console.log("Server Listening on port 3001");
+app.listen(PORT);
+console.log("Server Listening on port " + PORT);
 
