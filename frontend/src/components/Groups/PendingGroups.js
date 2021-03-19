@@ -29,8 +29,8 @@ class PendingGroups extends Component {
             <div class="card text-dark bg-light mb-3" style={{ width: '38rem' }}>
                 <div class="card-body">
                     <h6 class="card-title"><strong>{this.state.GROUP_NAME}</strong></h6>
-                    <a href="" onClick={this.props.acceptInvite.bind(this, this.state)} class="btn btn-outline-success">Accept</a>&nbsp;
-                    <a href="" onClick={this.props.rejectInvite.bind(this, this.state)} class="btn btn-outline-secondary">Reject</a>
+                    <button onClick={this.props.acceptInvite.bind(this, this.state)} class="btn btn-outline-success">Accept</button>&nbsp;
+                    <a onClick={this.props.rejectInvite.bind(this, this.state)} class="btn btn-outline-secondary">Reject</a>
                 </div>
             </div>
         )
