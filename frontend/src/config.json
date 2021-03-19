@@ -1,3 +1,4 @@
 {
-    "API_URL": "http://localhost:3001"
+    "API_URL": "https://splitwise-sj.herokuapp.com",
+    "API_URL_LOCALHOST": "http://localhost:3001"
 }
