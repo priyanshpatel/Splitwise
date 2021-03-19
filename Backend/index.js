@@ -12,7 +12,8 @@ const PORT = process.env.PORT || 3001
 
 app.set('view engine', 'ejs');
 
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+// app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+app.use(cors({ origin: 'https://splitwise-sj.herokuapp.com', credentials: true }));
 
 app.use(session({
     secret: 'splitwise_secure_string',
